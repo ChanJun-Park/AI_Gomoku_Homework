@@ -11,14 +11,17 @@ WHITE  = (255, 255, 255)
 YELLOW = (255, 211,  21)
 
 goBoardImg = pygame.image.load('go.png')
-goBoardImgX = 200
-goBoardImgY = 100
+goBoardImgX = 110
+goBoardImgY = 10
 
 mousex = 0
 mousey = 0
 
-DISPLAYSURF.fill(WHITE);
+DISPLAYSURF.fill(WHITE)
 DISPLAYSURF.blit(goBoardImg, (goBoardImgX, goBoardImgY))
+
+topleftx = 130
+toplefty = 30
 
 while True:
     for event in pygame.event.get():
@@ -28,5 +31,9 @@ while True:
         elif event.type == MOUSEBUTTONDOWN:
             mousex, mousey = event.pos
             print(mousex, mousey)
-            pygame.draw.circle(DISPLAYSURF, BLACK, (mousex, mousey), 10, 0)
+            boardx = (mousex - 130 + 15) // 30
+            boardy = (mousey - 30 + 15) // 30
+            boardprtx = boardx * 30 + 130
+            boardprty = boardy * 30 + 30
+            pygame.draw.circle(DISPLAYSURF, BLACK, (boardprtx, boardprty), 15, 0)
     pygame.display.update()
