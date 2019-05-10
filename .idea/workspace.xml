@@ -2,13 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="876d1922-7c5e-404e-9a5e-52ca3a3585b5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/pygame공부/memorypuzzle.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/AI_Gomoku_Homework.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/AI_Gomoku_Homework.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blankpygame.py" beforeDir="false" afterPath="$PROJECT_DIR$/pygame공부/blankpygame.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cat.png" beforeDir="false" afterPath="$PROJECT_DIR$/pygame공부/cat.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/catanimation.py" beforeDir="false" afterPath="$PROJECT_DIR$/pygame공부/catanimation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/drawing.py" beforeDir="false" afterPath="$PROJECT_DIR$/pygame공부/drawing.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fonttext.py" beforeDir="false" afterPath="$PROJECT_DIR$/pygame공부/fonttext.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pygame공부/memorypuzzle.py" beforeDir="false" afterPath="$PROJECT_DIR$/pygame공부/memorypuzzle.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -21,10 +18,22 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/pygame공부/memorypuzzle.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="133">
-              <caret line="7" column="12" lean-forward="true" selection-start-line="7" selection-start-column="12" selection-end-line="7" selection-end-column="12" />
+            <state relative-caret-position="179">
+              <caret line="177" column="22" lean-forward="true" selection-start-line="177" selection-start-column="22" selection-end-line="177" selection-end-column="22" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/go_board_test.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="357">
+              <caret line="17" column="10" selection-start-line="17" selection-start-column="10" selection-end-line="17" selection-end-column="10" />
+              <folding>
+                <element signature="e#0#18#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -51,9 +60,9 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="129" />
+    <option name="x" value="126" />
     <option name="y" value="-25" />
-    <option name="width" value="1244" />
+    <option name="width" value="1245" />
     <option name="height" value="820" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -62,7 +71,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -79,10 +87,12 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -101,7 +111,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.catanimation">
+  <component name="RunManager" selected="Python.go_board_test">
     <configuration name="catanimation" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="AI_Gomoku_Homework" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -167,8 +177,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.catanimation" />
         <item itemvalue="Python.go_board_test" />
+        <item itemvalue="Python.catanimation" />
         <item itemvalue="Python.drawing" />
       </list>
     </recent_temporary>
@@ -202,15 +212,15 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1456" height="876" extended-state="6" />
+    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.21227081" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.21202114" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.26684636" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.22946176" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -234,36 +244,19 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/pygame공부/memorypuzzle.py</url>
-          <line>104</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/pygame공부/memorypuzzle.py</url>
-          <line>126</line>
+          <line>237</line>
           <option name="timeStamp" value="3" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/pygame공부/memorypuzzle.py</url>
-          <line>113</line>
-          <option name="timeStamp" value="4" />
+          <line>91</line>
+          <option name="timeStamp" value="5" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/go_coordinate.PNG">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/go_board_test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="209">
-          <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/go_coordinate.PNG" />
     <entry file="file://$PROJECT_DIR$/go.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
@@ -296,10 +289,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/go_board_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="17" column="10" selection-start-line="17" selection-start-column="10" selection-end-line="17" selection-end-column="10" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/pygame공부/memorypuzzle.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="133">
-          <caret line="7" column="12" lean-forward="true" selection-start-line="7" selection-start-column="12" selection-end-line="7" selection-end-column="12" />
+        <state relative-caret-position="179">
+          <caret line="177" column="22" lean-forward="true" selection-start-line="177" selection-start-column="22" selection-end-line="177" selection-end-column="22" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>
