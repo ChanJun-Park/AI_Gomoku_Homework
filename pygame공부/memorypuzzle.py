@@ -179,7 +179,7 @@ def drawIcon(shape, color, boxx, boxy):
         pygame.draw.circle(DISPLAYSURF, color, (left + half, top + half), half - 5)
         pygame.draw.circle(DISPLAYSURF, BGCOLOR, (left + half, top + half), quarter - 5)
     elif shape == SQUARE:
-        pygame.draw.rect(DISPLAYSURF, BGCOLOR, (left + quarter, top + quarter, BOXSIZE - half, BOXSIZE - half))
+        pygame.draw.rect(DISPLAYSURF, color, (left + quarter, top + quarter, BOXSIZE - half, BOXSIZE - half))
     elif shape == DIAMOND:
         pygame.draw.polygon(DISPLAYSURF, color, ((left + half, top), (left + BOXSIZE - 1, top + half),\
                                                  (left + half, top + BOXSIZE - 1), (left, top + half)))
@@ -249,3 +249,26 @@ def startGameAnimation(board):
     for boxGroup in boxGroups:
         revealBoxesAnimation(board, boxGroup)
         coverBoxesAnimation(board, boxGroup)
+
+def gameWonAnimation(board):
+    # 플레이어가 승리하면 배경색이 깜빡인다
+    coveredBoxes = generateRevealedBoxesData(True)
+    color1 = LIGHTBGCOLOR
+    color2 = BGCOLOR
+
+    for i in range(13):
+        color1, color2 = color2, color1
+        DISPLAYSURF.fill(color1)
+        drawBoard(board, coveredBoxes)
+        pygame.display.update()
+        pygame.time.wait(300)
+
+def hasWon(revealedBoxes):
+    #모든 상자를 열었으면 True를 반환한다. 아니면 False를 반환한다.
+    for i in revealedBoxes:
+        if False in i:
+            return False
+    return True
+
+if __name__ == '__main__':
+    main()
