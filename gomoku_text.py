@@ -1,11 +1,14 @@
 '''
 2019.05.12
 기본적인 오목 UI 만들기
-0. 흑돌, 백돌 선택 버튼
-1. 게임 시작 버튼
-2. 게임 리셋 버튼
-3. 누구의 턴인지 알려주는 텍스트
-4. 게임 승패를 알려주는 텍스트
+0. 흑돌, 백돌 선택 버튼 (o)
+1. 게임 리셋 버튼 (o)
+2. 초급, 중급, 고급 또는 1~5단계 난이도 조절 메뉴 및 기능 구현
+    - 2가지 이상 알고리즘 구현
+    - min/max algorithm (with alpha beta prunning)
+    - 유전자 알고리즘
+    - 머신러닝
+3. 33 반칙 on/off 기능 구현
 '''
 
 import pygame, sys
@@ -81,52 +84,64 @@ def main():
     pygame.display.set_caption('Go Board Test')
 
     BASICFONT = pygame.font.Font('freesansbold.ttf', BASICFONTSIZE)
-
-    P1_COLOR, P2_COLOR = selectStoneColor()
-    if P1_COLOR == BLACK:
-        turn = PLAYER1
-    else:
-        turn = PLAYER2
-
     NEW_SURF, NEW_RECT = makeText('New', BLACK, WHITE, WINDOWWIDTH - 120, WINDOWHEIGHT - 90)
 
-    # 바둑돌의 상태를 저장하는 2차원 리스트
-    goBoard = getInitialBoard()
-
-    mousex = 0
-    mousey = 0
-
-    # 바둑판 위의 좌표
-    boardx = 0
-    boardy = 0
-
-    drawBoard(goBoard)
-    # 메인 게임 루프
+    # 새 게임 단위 루프
     while True:
-        DISPLAYSURF.fill(BGCOLOR)
+        P1_COLOR, P2_COLOR = selectStoneColor()
+        if P1_COLOR == BLACK:
+            turn = PLAYER1
+        else:
+            turn = PLAYER2
+
+        # 바둑돌의 상태를 저장하는 2차원 리스트
+        goBoard = getInitialBoard()
+
+        # 흑돌(선수) 처리
+        goBoard[int(GO_BOARD_X_COUNT / 2)][int(GO_BOARD_Y_COUNT / 2)] = turn;
+        turn = (PLAYER1 if turn == PLAYER2 else PLAYER2)
+
+        mousex = 0
+        mousey = 0
+
+        # 바둑판 위의 좌표
+        boardx = 0
+        boardy = 0
+
         drawBoard(goBoard)
+        # 메인 게임 루프
+        while True:
+            DISPLAYSURF.fill(BGCOLOR)
+            drawBoard(goBoard)
 
-        mouseClicked = False
-        for event in pygame.event.get():
-            if event.type == QUIT:
-                terminate()
-            elif event.type == MOUSEMOTION:
-                mousex, mousey = event.pos
-            elif event.type == MOUSEBUTTONDOWN:
-                mousex, mousey = event.pos
-                mouseClicked = True
+            mouseClicked = False
+            for event in pygame.event.get():
+                if event.type == QUIT:
+                    terminate()
+                elif event.type == MOUSEMOTION:
+                    mousex, mousey = event.pos
+                elif event.type == MOUSEBUTTONDOWN:
+                    mousex, mousey = event.pos
+                    mouseClicked = True
 
-        boardx, boardy = getBoardPosAtPixel(mousex, mousey)
-        if boardx != None and boardy != None:
-            if not goBoard[boardx][boardy]:
-                drawPseudoStone(goBoard, boardx, boardy)
-            if not goBoard[boardx][boardy] and mouseClicked:
-                goBoard[boardx][boardy] = turn
-                turn = (PLAYER1 if turn == PLAYER2 else PLAYER2)
+            boardx, boardy = getBoardPosAtPixel(mousex, mousey)
+            if boardx != None and boardy != None:
+                if not goBoard[boardx][boardy]:
+                    drawPseudoStone(goBoard, boardx, boardy)
+                if not goBoard[boardx][boardy] and mouseClicked:
+                    goBoard[boardx][boardy] = turn
+                    turn = (PLAYER1 if turn == PLAYER2 else PLAYER2)
+                    pass
                 pass
-            pass
 
-        pygame.display.update()
+            if NEW_RECT.collidepoint(mousex, mousey):
+                pygame.mouse.set_cursor(*HAND_CURSOR)
+                if mouseClicked:
+                    pygame.mouse.set_cursor(*pygame.cursors.arrow)
+                    break;
+
+            pygame.display.update()
+        pass
 
 def terminate():
     pygame.quit()
@@ -164,10 +179,10 @@ def drawBoard(board):
         for y in range(GO_BOARD_Y_COUNT):
             left, top = getPixelPosOfBoard(x, y)
             if board[x][y] == PLAYER1:
-                pygame.draw.circle(DISPLAYSURF, BLACK, (left, top), STONE_RADIUS, 0)
+                pygame.draw.circle(DISPLAYSURF, P1_COLOR, (left, top), STONE_RADIUS, 0)
                 pass
             elif board[x][y] == PLAYER2:
-                pygame.draw.circle(DISPLAYSURF, WHITE, (left, top), STONE_RADIUS, 0)
+                pygame.draw.circle(DISPLAYSURF, P2_COLOR, (left, top), STONE_RADIUS, 0)
                 pass
     pass
 
