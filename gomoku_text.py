@@ -69,6 +69,10 @@ EMPTY   = 0
 PLAYER1 = 1
 PLAYER2 = 2
 
+# 게임 상태
+CONTINUE = 3
+DRAW = 4
+
 def main():
     global DISPLAYSURF, BASICFONT,\
     STONE_SELECT_SURF, STONE_SELECT_RECT, \
@@ -97,9 +101,12 @@ def main():
         # 바둑돌의 상태를 저장하는 2차원 리스트
         goBoard = getInitialBoard()
 
+
         # 흑돌(선수) 처리
         goBoard[int(GO_BOARD_X_COUNT / 2)][int(GO_BOARD_Y_COUNT / 2)] = turn;
         turn = (PLAYER1 if turn == PLAYER2 else PLAYER2)
+
+        stoneCnt = 1
 
         mousex = 0
         mousey = 0
@@ -113,6 +120,13 @@ def main():
         while True:
             DISPLAYSURF.fill(BGCOLOR)
             drawBoard(goBoard)
+
+            # 게임 승패 판정
+            gameState = finishCheck(goBoard, stoneCnt)
+            if gameState != CONTINUE:
+                drawFinishEvent(gameState)
+                waitForNewGame()
+                break;
 
             mouseClicked = False
             for event in pygame.event.get():
@@ -139,6 +153,8 @@ def main():
                 if mouseClicked:
                     pygame.mouse.set_cursor(*pygame.cursors.arrow)
                     break;
+            else:
+                pygame.mouse.set_cursor(*pygame.cursors.arrow)
 
             pygame.display.update()
         pass
@@ -193,6 +209,89 @@ def drawPseudoStone(board, x, y):
             pygame.draw.circle(DISPLAYSURF, P1_COLOR, (left, top), STONE_RADIUS, 2)
         else: # turn == PLAYER2
             pygame.draw.circle(DISPLAYSURF, P2_COLOR, (left, top), STONE_RADIUS, 2)
+    pass
+
+def finishCheck(board, cnt):
+    # ↘ 오목 체크
+    for x in range(GO_BOARD_X_COUNT - 4):
+        for y in range(GO_BOARD_Y_COUNT - 4):
+            if(board[x][y]==PLAYER1 and board[x+1][y+1]==PLAYER1 and board[x+2][y+2]==PLAYER1\
+                    and board[x+3][y+3]==PLAYER1 and board[x+4][y+4]==PLAYER1) :
+                return PLAYER1;
+            elif(board[x][y]==PLAYER2 and board[x+1][y+1]==PLAYER2 and board[x+2][y+2]==PLAYER2\
+                    and board[x+3][y+3]==PLAYER2 and board[x+4][y+4]==PLAYER2) :
+                return PLAYER2;
+
+    # → 오목 체크
+    for x in range(GO_BOARD_X_COUNT - 4):
+        for y in range(GO_BOARD_Y_COUNT):
+            if (board[x][y] == PLAYER1 and board[x + 1][y] == PLAYER1 and board[x + 2][y] == PLAYER1 \
+                    and board[x + 3][y] == PLAYER1 and board[x + 4][y] == PLAYER1):
+                return PLAYER1;
+            elif (board[x][y] == PLAYER2 and board[x + 1][y] == PLAYER2 and board[x + 2][y] == PLAYER2 \
+                  and board[x + 3][y] == PLAYER2 and board[x + 4][y] == PLAYER2):
+                return PLAYER2;
+
+    # ↓ 오목 체크
+    for x in range(GO_BOARD_X_COUNT):
+        for y in range(GO_BOARD_Y_COUNT - 4):
+            if (board[x][y] == PLAYER1 and board[x][y + 1] == PLAYER1 and board[x][y + 2] == PLAYER1 \
+                    and board[x][y + 3] == PLAYER1 and board[x][y + 4] == PLAYER1):
+                return PLAYER1;
+            elif (board[x][y] == PLAYER2 and board[x][y + 1] == PLAYER2 and board[x][y + 2] == PLAYER2 \
+                  and board[x][y + 3] == PLAYER2 and board[x][y + 4] == PLAYER2):
+                return PLAYER2;
+
+    # ↙ 오목 체크
+    for x in range(4, GO_BOARD_X_COUNT):
+        for y in range(4, GO_BOARD_Y_COUNT):
+            if (board[x][y] == PLAYER1 and board[x - 1][y + 1] == PLAYER1 and board[x - 2][y + 2] == PLAYER1 \
+                    and board[x - 3][y + 3] == PLAYER1 and board[x - 4][y + 4] == PLAYER1):
+                return PLAYER1;
+            elif (board[x][y] == PLAYER2 and board[x - 1][y + 1] == PLAYER2 and board[x - 2][y + 2] == PLAYER2 \
+                  and board[x - 3][y + 3] == PLAYER2 and board[x - 4][y + 4] == PLAYER2):
+                return PLAYER2;
+
+    # 무승부 판정
+    if cnt == GO_BOARD_X_COUNT * GO_BOARD_Y_COUNT:
+        return DRAW
+    else:
+        return CONTINUE
+    pass
+
+def drawFinishEvent(gameState):
+    if gameState == PLAYER1:
+        RESULT_SURF, RESULT_RECT = makeText('PLAYER1 WIN', BLACK, WHITE, WINDOWWIDTH - 170, 90)
+    elif gameState == PLAYER2:
+        RESULT_SURF, RESULT_RECT = makeText('PLAYER2 WIN', BLACK, WHITE, WINDOWWIDTH - 170, 90)
+    elif gameState == DRAW:
+        RESULT_SURF, RESULT_RECT = makeText('DRAW', BLACK, WHITE, WINDOWWIDTH - 170, 90)
+
+    DISPLAYSURF.blit(RESULT_SURF, RESULT_RECT)
+    pygame.display.update()
+    pass
+
+def waitForNewGame():
+    mousex = 0
+    mousey = 0
+    while True:
+        mouseClicked = False
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                terminate()
+            elif event.type == MOUSEMOTION:
+                mousex, mousey = event.pos
+            elif event.type == MOUSEBUTTONDOWN:
+                mousex, mousey = event.pos
+                mouseClicked = True
+
+        if NEW_RECT.collidepoint(mousex, mousey):
+            pygame.mouse.set_cursor(*HAND_CURSOR)
+            if mouseClicked:
+                pygame.mouse.set_cursor(*pygame.cursors.arrow)
+                break;
+        else:
+            pygame.mouse.set_cursor(*pygame.cursors.arrow)
     pass
 
 # player1, player2 의 돌의 색깔을 선택하여 반환해준다.
