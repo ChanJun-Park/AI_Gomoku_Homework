@@ -13,7 +13,7 @@
 
 import pygame, sys
 from pygame.locals import *
-
+import minmax_test
 WINDOWWIDTH = 1000
 WINDOWHEIGHT = 600
 
@@ -117,10 +117,18 @@ def main():
         boardy = 0
 
         drawBoard(goBoard)
+
+        # AI 객체 생성 (여기서 난이도 조절?)
+        ai = minmax_test.Ai1(goBoard)
+
         # 메인 게임 루프
         while True:
             DISPLAYSURF.fill(BGCOLOR)
             drawBoard(goBoard)
+
+
+            print(ai.searchSpace[0], ai.searchSpace[1], ai.searchSpace[2], ai.searchSpace[3])
+
 
             # 게임 승패 판정
             gameState = finishCheck(goBoard, stoneCnt)
@@ -128,6 +136,15 @@ def main():
                 drawFinishEvent(gameState)
                 waitForNewGame()
                 break;
+
+            #AI 차례 처리
+            if turn == PLAYER2:
+                while True:
+                    if ai.placement():
+                        break
+                stoneCnt += 1
+                turn = (PLAYER1 if turn == PLAYER2 else PLAYER2)
+                continue
 
             mouseClicked = False
             for event in pygame.event.get():
@@ -145,6 +162,9 @@ def main():
                     drawPseudoStone(goBoard, boardx, boardy)
                 if not goBoard[boardx][boardy] and mouseClicked:
                     goBoard[boardx][boardy] = turn
+                    stoneCnt += 1
+                    ai.stoneCnt += 1
+                    ai.resetSearchSpace(boardx, boardy)
                     turn = (PLAYER1 if turn == PLAYER2 else PLAYER2)
                     pass
                 pass

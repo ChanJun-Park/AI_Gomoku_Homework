@@ -1,10 +1,85 @@
 from gomoku_test import GO_BOARD_X_COUNT, GO_BOARD_Y_COUNT, EMPTY, PLAYER1, PLAYER2, AI , CONTINUE, DRAW
+INF = 2000000000
 
 
-class Node:
-    def __init__(self):
-        self.bestvalue = 0
-        self.child = list()
+class Ai1:
+    def __init__(self, board):
+        self.goBoard = board
+        self.searchSpace = [int(GO_BOARD_X_COUNT / 2) - 2, int(GO_BOARD_X_COUNT / 2) + 2,
+                            int(GO_BOARD_Y_COUNT / 2) - 2, int(GO_BOARD_Y_COUNT / 2) + 2]
+        self.stoneCnt = 1
+        pass
+
+    def resetSearchSpace(self, x, y):
+        if self.searchSpace[0] > x:
+            self.searchSpace[0] = (x - 2 if x > 1 else x)
+        if self.searchSpace[1] < x:
+            self.searchSpace[1] = (x + 2 if x < GO_BOARD_X_COUNT - 2 else x)
+        if self.searchSpace[2] > y:
+            self.searchSpace[2] = (y - 2 if y > 1 else y)
+        if self.searchSpace[3] < y:
+            self.searchSpace[3] = (y + 2 if y < GO_BOARD_Y_COUNT - 2 else y)
+        pass
+
+    def minmax(self, depth, player):
+        if depth == 0 or self.stoneCnt == GO_BOARD_X_COUNT * GO_BOARD_Y_COUNT:
+            return (e_function(self.goBoard), None, None)
+        if player == AI:
+            maxValue = -INF
+            x = 0
+            y = 0
+            for i in range(self.searchSpace[0], self.searchSpace[1] + 1):
+                for j in range(self.searchSpace[2], self.searchSpace[3] + 1):
+                    if self.goBoard[i][j] == EMPTY:
+                        self.goBoard[i][j] = AI
+                        ret = self.minmax(depth - 1, PLAYER1)
+                        if ret[0] > maxValue:
+                            maxValue = ret[0]
+                            x = ret[1]
+                            y = ret[2]
+                        self.goBoard[i][j] = EMPTY
+
+            if depth == 3:
+                return (maxValue, x, y)
+            else:
+                return (maxValue, None, None)
+            pass
+        else: # player == PLAYER1
+            minValue = INF
+            x = 0
+            y = 0
+            for i in range(self.searchSpace[0], self.searchSpace[1] + 1):
+                for j in range(self.searchSpace[2], self.searchSpace[3] + 1):
+                    if self.goBoard[i][j] == EMPTY:
+                        self.goBoard[i][j] = PLAYER1
+                        ret = self.minmax(depth - 1, AI)
+                        if ret[0] < minValue:
+                            minValue = ret[0]
+                            x = ret[1]
+                            y = ret[2]
+                        self.goBoard[i][j] = EMPTY
+            if depth == 3:
+                return (minValue, x, y)
+            else:
+                return (minValue, None, None)
+            pass
+
+    def placement(self):
+        place = self.minmax(3, AI)
+        x = place[1]
+        y = place[2]
+
+        if x == None and y == None:
+            for i in range(self.searchSpace[0], self.searchSpace[1] + 1):
+                for j in range(self.searchSpace[2], self.searchSpace[3] + 1):
+                    if self.goBoard[i][j] == EMPTY:
+                        x = i
+                        y = j
+        self.goBoard[x][y] = AI
+        self.stoneCnt += 1
+        self.resetSearchSpace(x, y)
+        return True
+
     pass
 
 
@@ -244,9 +319,9 @@ def check_s_1_10(board, x, y):
 # →, 이목, 4개 체크
 def check_s_1_11(board, x, y):
     if board[x][y] == EMPTY\
-        and board[x + 1][y] == AI\
-        and board[x + 2][y] == AI\
-        and board[x + 3][y] == EMPTY:
+            and board[x + 1][y] == AI\
+            and board[x + 2][y] == AI\
+            and board[x + 3][y] == EMPTY:
         return 2
     return 0
 
@@ -254,14 +329,14 @@ def check_s_1_11(board, x, y):
 # →, 상대편 바둑돌이 막고 있는 이목, 4개 체크
 def check_s_1_12(board, x, y):
     if board[x][y] == EMPTY\
-        and board[x + 1][y] == AI\
-        and board[x + 2][y] == AI\
-        and board[x + 3][y] == PLAYER1:
+            and board[x + 1][y] == AI\
+            and board[x + 2][y] == AI\
+            and board[x + 3][y] == PLAYER1:
         return 1
     if board[x][y] == PLAYER1\
-        and board[x + 1][y] == AI\
-        and board[x + 2][y] == AI\
-        and board[x + 3][y] == EMPTY:
+            and board[x + 1][y] == AI\
+            and board[x + 2][y] == AI\
+            and board[x + 3][y] == EMPTY:
         return 1
     return 0
 
@@ -288,3 +363,5 @@ def e_function(board):
             elif x < GO_BOARD_X_COUNT - 3:
                 score += check_s_1_11(board, x, y)
                 score += check_s_1_12(board, x, y)
+
+    return score
