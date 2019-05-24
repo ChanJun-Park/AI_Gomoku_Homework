@@ -126,10 +126,6 @@ def main():
             DISPLAYSURF.fill(BGCOLOR)
             drawBoard(goBoard)
 
-
-            print(ai.searchSpace[0], ai.searchSpace[1], ai.searchSpace[2], ai.searchSpace[3])
-
-
             # 게임 승패 판정
             gameState = finishCheck(goBoard, stoneCnt)
             if gameState != CONTINUE:
