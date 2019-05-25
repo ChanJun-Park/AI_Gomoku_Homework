@@ -65,12 +65,147 @@ class Ai1:
                 return (minValue, None, None)
             pass
 
+    def defence(self):
+        for x in range(GO_BOARD_X_COUNT):
+            for y in range(GO_BOARD_Y_COUNT):
+                # → 체크
+                if x < GO_BOARD_X_COUNT - 7:
+                    for z in range(len(DEFENCE_7PATTERNS)):
+                        check = True
+                        for k in range(7):
+                            if self.goBoard[x + k][y] != DEFENCE_7PATTERNS[z][k]:
+                                check = False
+                                break
+                        if check:
+                            i = DEFENCE_7PATTERNS[z].index(EMPTY)
+                            return (x + i, y)
+                if x < GO_BOARD_X_COUNT - 6:
+                    for z in range(len(DEFENCE_6PATTERNS)):
+                        check = True
+                        for k in range(6):
+                            if self.goBoard[x + k][y] != DEFENCE_6PATTERNS[z][k]:
+                                check = False
+                                break
+                        if check:
+                            i = DEFENCE_6PATTERNS[z].index(EMPTY)
+                            return (x + i, y)
+                if x < GO_BOARD_X_COUNT - 5:
+                    for z in range(len(DEFENCE_5PATTERNS)):
+                        check = True
+                        for k in range(5):
+                            if self.goBoard[x + k][y] != DEFENCE_5PATTERNS[z][k]:
+                                check = False
+                                break
+                        if check:
+                            i = DEFENCE_5PATTERNS[z].index(EMPTY)
+                            return (x + i, y)
+
+                # ↘ 체크
+                if x < GO_BOARD_X_COUNT - 7 and y < GO_BOARD_Y_COUNT - 7:
+                    for z in range(len(DEFENCE_7PATTERNS)):
+                        check = True
+                        for k in range(7):
+                            if self.goBoard[x + k][y + k] != DEFENCE_7PATTERNS[z][k]:
+                                check = False
+                                break
+                        if check:
+                            i = DEFENCE_7PATTERNS[z].index(EMPTY)
+                            return (x + i, y + i)
+                if x < GO_BOARD_X_COUNT - 6 and y < GO_BOARD_Y_COUNT - 6:
+                    for z in range(len(DEFENCE_6PATTERNS)):
+                        check = True
+                        for k in range(6):
+                            if self.goBoard[x + k][y + k] != DEFENCE_6PATTERNS[z][k]:
+                                check = False
+                                break
+                        if check:
+                            i = DEFENCE_6PATTERNS[z].index(EMPTY)
+                            return (x + i, y + i)
+                if x < GO_BOARD_X_COUNT - 5 and y < GO_BOARD_Y_COUNT - 5:
+                    for z in range(len(DEFENCE_5PATTERNS)):
+                        check = True
+                        for k in range(5):
+                            if self.goBoard[x + k][y + k] != DEFENCE_5PATTERNS[z][k]:
+                                check = False
+                                break
+                        if check:
+                            i = DEFENCE_5PATTERNS[z].index(EMPTY)
+                            return (x + i, y + i)
+
+                # ↓ 체크
+                if y < GO_BOARD_Y_COUNT - 7:
+                    for z in range(len(DEFENCE_7PATTERNS)):
+                        check = True
+                        for k in range(7):
+                            if self.goBoard[x][y + k] != DEFENCE_7PATTERNS[z][k]:
+                                check = False
+                                break
+                        if check:
+                            i = DEFENCE_7PATTERNS[z].index(EMPTY)
+                            return (x, y + i)
+                if y < GO_BOARD_Y_COUNT - 6:
+                    for z in range(len(DEFENCE_6PATTERNS)):
+                        check = True
+                        for k in range(6):
+                            if self.goBoard[x][y + k] != DEFENCE_6PATTERNS[z][k]:
+                                check = False
+                                break
+                        if check:
+                            i = DEFENCE_6PATTERNS[z].index(EMPTY)
+                            return (x, y + i)
+                if y < GO_BOARD_Y_COUNT - 5:
+                    for z in range(len(DEFENCE_5PATTERNS)):
+                        check = True
+                        for k in range(5):
+                            if self.goBoard[x][y + k] != DEFENCE_5PATTERNS[z][k]:
+                                check = False
+                                break
+                        if check:
+                            i = DEFENCE_5PATTERNS[z].index(EMPTY)
+                            return (x, y + i)
+
+                # ↙ 체크
+                if x >= 7 and y < GO_BOARD_Y_COUNT - 7:
+                    for z in range(len(DEFENCE_7PATTERNS)):
+                        check = True
+                        for k in range(7):
+                            if self.goBoard[x - k][y + k] != DEFENCE_7PATTERNS[z][k]:
+                                check = False
+                                break
+                        if check:
+                            i = DEFENCE_7PATTERNS[z].index(EMPTY)
+                            return (x - i, y + i)
+                if x >= 6 and y < GO_BOARD_Y_COUNT - 6:
+                    for z in range(len(DEFENCE_6PATTERNS)):
+                        check = True
+                        for k in range(6):
+                            if self.goBoard[x - k][y + k] != DEFENCE_6PATTERNS[z][k]:
+                                check = False
+                                break
+                        if check:
+                            i = DEFENCE_6PATTERNS[z].index(EMPTY)
+                            return (x - i, y + i)
+                if x >= 5 and y < GO_BOARD_Y_COUNT - 5:
+                    for z in range(len(DEFENCE_5PATTERNS)):
+                        check = True
+                        for k in range(5):
+                            if self.goBoard[x - k][y + k] != DEFENCE_5PATTERNS[z][k]:
+                                check = False
+                                break
+                        if check:
+                            i = DEFENCE_5PATTERNS[z].index(EMPTY)
+                            return (x - i, y + i)
+        return (None, None)
+
+
+
     def placement(self):
-        place = self.minmax(1, AI)
-        x = place[1]
-        y = place[2]
+        x, y = self.defence()
 
-
+        if x is None or y is None:
+            place = self.minmax(1, AI)
+            x = place[1]
+            y = place[2]
 
         self.goBoard[x][y] = AI
         self.stoneCnt += 1
@@ -95,7 +230,7 @@ def e_function(board):
                             break
                     if check:
                         score += AI_7PATTERNS_SCORE[z]
-            elif x < GO_BOARD_X_COUNT - 6:
+            if x < GO_BOARD_X_COUNT - 6:
                 for z in range(len(AI_6PATTERNS)):
                     check = True
                     for k in range(6):
@@ -104,7 +239,7 @@ def e_function(board):
                             break
                     if check:
                         score += AI_6PATTERNS_SCORE[z]
-            elif x < GO_BOARD_X_COUNT - 5:
+            if x < GO_BOARD_X_COUNT - 5:
                 for z in range(len(AI_5PATTERNS)):
                     check = True
                     for k in range(5):
@@ -113,7 +248,7 @@ def e_function(board):
                             break
                     if check:
                         score += AI_5PATTERNS_SCORE[z]
-            elif x < GO_BOARD_X_COUNT - 4:
+            if x < GO_BOARD_X_COUNT - 4:
                 for z in range(len(AI_4PATTERNS)):
                     check = True
                     for k in range(4):
@@ -133,7 +268,7 @@ def e_function(board):
                             break
                     if check:
                         score += AI_7PATTERNS_SCORE[z]
-            elif x < GO_BOARD_X_COUNT - 6 and y < GO_BOARD_Y_COUNT - 6:
+            if x < GO_BOARD_X_COUNT - 6 and y < GO_BOARD_Y_COUNT - 6:
                 for z in range(len(AI_6PATTERNS)):
                     check = True
                     for k in range(6):
@@ -142,7 +277,7 @@ def e_function(board):
                             break
                     if check:
                         score += AI_6PATTERNS_SCORE[z]
-            elif x < GO_BOARD_X_COUNT - 5 and y < GO_BOARD_Y_COUNT - 5:
+            if x < GO_BOARD_X_COUNT - 5 and y < GO_BOARD_Y_COUNT - 5:
                 for z in range(len(AI_5PATTERNS)):
                     check = True
                     for k in range(5):
@@ -151,7 +286,7 @@ def e_function(board):
                             break
                     if check:
                         score += AI_5PATTERNS_SCORE[z]
-            elif x < GO_BOARD_X_COUNT - 4 and y < GO_BOARD_Y_COUNT - 4:
+            if x < GO_BOARD_X_COUNT - 4 and y < GO_BOARD_Y_COUNT - 4:
                 for z in range(len(AI_4PATTERNS)):
                     check = True
                     for k in range(4):
@@ -171,7 +306,7 @@ def e_function(board):
                             break
                     if check:
                         score += AI_7PATTERNS_SCORE[z]
-            elif y < GO_BOARD_Y_COUNT - 6:
+            if y < GO_BOARD_Y_COUNT - 6:
                 for z in range(len(AI_6PATTERNS)):
                     check = True
                     for k in range(6):
@@ -180,7 +315,7 @@ def e_function(board):
                             break
                     if check:
                         score += AI_6PATTERNS_SCORE[z]
-            elif y < GO_BOARD_Y_COUNT - 5:
+            if y < GO_BOARD_Y_COUNT - 5:
                 for z in range(len(AI_5PATTERNS)):
                     check = True
                     for k in range(5):
@@ -189,7 +324,7 @@ def e_function(board):
                             break
                     if check:
                         score += AI_5PATTERNS_SCORE[z]
-            elif y < GO_BOARD_Y_COUNT - 4:
+            if y < GO_BOARD_Y_COUNT - 4:
                 for z in range(len(AI_4PATTERNS)):
                     check = True
                     for k in range(4):
@@ -209,7 +344,7 @@ def e_function(board):
                             break
                     if check:
                         score += AI_7PATTERNS_SCORE[z]
-            elif x >= 6 and y < GO_BOARD_Y_COUNT - 6:
+            if x >= 6 and y < GO_BOARD_Y_COUNT - 6:
                 for z in range(len(AI_6PATTERNS)):
                     check = True
                     for k in range(6):
@@ -218,7 +353,7 @@ def e_function(board):
                             break
                     if check:
                         score += AI_6PATTERNS_SCORE[z]
-            elif x >= 5 and y < GO_BOARD_Y_COUNT - 5:
+            if x >= 5 and y < GO_BOARD_Y_COUNT - 5:
                 for z in range(len(AI_5PATTERNS)):
                     check = True
                     for k in range(5):
@@ -227,7 +362,7 @@ def e_function(board):
                             break
                     if check:
                         score += AI_5PATTERNS_SCORE[z]
-            elif x >= 4 and y < GO_BOARD_Y_COUNT - 4:
+            if x >= 4 and y < GO_BOARD_Y_COUNT - 4:
                 for z in range(len(AI_4PATTERNS)):
                     check = True
                     for k in range(4):
