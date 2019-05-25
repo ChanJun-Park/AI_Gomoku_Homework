@@ -1,4 +1,5 @@
 from gomoku_test import GO_BOARD_X_COUNT, GO_BOARD_Y_COUNT, EMPTY, PLAYER1, PLAYER2, AI , CONTINUE, DRAW
+from evaluate import *
 INF = 2000000000
 
 
@@ -35,11 +36,11 @@ class Ai1:
                         ret = self.minmax(depth - 1, PLAYER1)
                         if ret[0] > maxValue:
                             maxValue = ret[0]
-                            x = ret[1]
-                            y = ret[2]
+                            x = i
+                            y = j
                         self.goBoard[i][j] = EMPTY
 
-            if depth == 3:
+            if depth == 1:
                 return (maxValue, x, y)
             else:
                 return (maxValue, None, None)
@@ -55,26 +56,22 @@ class Ai1:
                         ret = self.minmax(depth - 1, AI)
                         if ret[0] < minValue:
                             minValue = ret[0]
-                            x = ret[1]
-                            y = ret[2]
+                            x = i
+                            y = j
                         self.goBoard[i][j] = EMPTY
-            if depth == 3:
+            if depth == 1:
                 return (minValue, x, y)
             else:
                 return (minValue, None, None)
             pass
 
     def placement(self):
-        place = self.minmax(3, AI)
+        place = self.minmax(1, AI)
         x = place[1]
         y = place[2]
 
-        if x == None and y == None:
-            for i in range(self.searchSpace[0], self.searchSpace[1] + 1):
-                for j in range(self.searchSpace[2], self.searchSpace[3] + 1):
-                    if self.goBoard[i][j] == EMPTY:
-                        x = i
-                        y = j
+
+
         self.goBoard[x][y] = AI
         self.stoneCnt += 1
         self.resetSearchSpace(x, y)
@@ -83,285 +80,161 @@ class Ai1:
     pass
 
 
-# s_x_y - s: state, x: →↘↓↙ y: 상태번호
-# →, 오목 체크, 5개 체크
-def check_s_1_1(board, x, y):
-    for i in range(5):
-        if board[x + i][y] != AI:
-            return 0
-    return 100
-
-
-# →, 열린 사목 체크, 6개 체크
-def check_s_1_2(board, x, y):
-    if board[x][y] == EMPTY \
-            and board[x + 1][y] == AI \
-            and board[x + 2][y] == AI \
-            and board[x + 3][y] == AI \
-            and board[x + 4][y] == AI \
-            and board[x + 5][y] == EMPTY:
-        return 70
-    return 0
-
-
-# →, 빈칸 하나 있는 사목, 7개 체크
-def check_s_1_3(board, x, y):
-    if board[x][y] == EMPTY \
-            and board[x + 1][y] == AI \
-            and board[x + 2][y] == EMPTY \
-            and board[x + 3][y] == AI \
-            and board[x + 4][y] == AI \
-            and board[x + 5][y] == AI \
-            and board[x + 6][y] == EMPTY:
-        return 33
-    if board[x][y] == EMPTY \
-            and board[x + 1][y] == AI \
-            and board[x + 2][y] == AI \
-            and board[x + 3][y] == EMPTY \
-            and board[x + 4][y] == AI \
-            and board[x + 5][y] == AI \
-            and board[x + 6][y] == EMPTY:
-        return 33
-    if board[x][y] == EMPTY \
-            and board[x + 1][y] == AI \
-            and board[x + 2][y] == AI \
-            and board[x + 3][y] == AI \
-            and board[x + 4][y] == EMPTY \
-            and board[x + 5][y] == AI \
-            and board[x + 6][y] == EMPTY:
-        return 33
-    return 0
-
-
-# →, 상대편 바둑돌이 막고 있고 빈칸 하나 있는 사목, 7개 체크
-def check_s_1_4(board, x, y):
-    if board[x][y] == EMPTY \
-            and board[x + 1][y] == AI \
-            and board[x + 2][y] == EMPTY \
-            and board[x + 3][y] == AI \
-            and board[x + 4][y] == AI \
-            and board[x + 5][y] == AI \
-            and board[x + 6][y] == PLAYER1:
-        return 32
-    if board[x][y] == EMPTY \
-            and board[x + 1][y] == AI \
-            and board[x + 2][y] == AI \
-            and board[x + 3][y] == EMPTY \
-            and board[x + 4][y] == AI \
-            and board[x + 5][y] == AI \
-            and board[x + 6][y] == PLAYER1:
-        return 32
-    if board[x][y] == EMPTY \
-            and board[x + 1][y] == AI \
-            and board[x + 2][y] == AI \
-            and board[x + 3][y] == AI \
-            and board[x + 4][y] == EMPTY \
-            and board[x + 5][y] == AI \
-            and board[x + 6][y] == PLAYER1:
-        return 32
-
-    if board[x][y] == PLAYER1 \
-            and board[x + 1][y] == AI \
-            and board[x + 2][y] == EMPTY \
-            and board[x + 3][y] == AI \
-            and board[x + 4][y] == AI \
-            and board[x + 5][y] == AI \
-            and board[x + 6][y] == EMPTY:
-        return 32
-    if board[x][y] == PLAYER1 \
-            and board[x + 1][y] == AI \
-            and board[x + 2][y] == AI \
-            and board[x + 3][y] == EMPTY \
-            and board[x + 4][y] == AI \
-            and board[x + 5][y] == AI \
-            and board[x + 6][y] == EMPTY:
-        return 32
-    if board[x][y] == PLAYER1 \
-            and board[x + 1][y] == AI \
-            and board[x + 2][y] == AI \
-            and board[x + 3][y] == AI \
-            and board[x + 4][y] == EMPTY \
-            and board[x + 5][y] == AI \
-            and board[x + 6][y] == EMPTY:
-        return 32
-    return 0
-
-
-# →, 양쪽에 상대편 바둑돌이 막고있고 빈칸 하나있는 사목, 7개 체크
-def check_s_1_5(board, x, y):
-    if board[x][y] == PLAYER1 \
-            and board[x + 1][y] == AI \
-            and board[x + 2][y] == EMPTY \
-            and board[x + 3][y] == AI \
-            and board[x + 4][y] == AI \
-            and board[x + 5][y] == AI \
-            and board[x + 6][y] == PLAYER1:
-        return 23
-    if board[x][y] == PLAYER1 \
-            and board[x + 1][y] == AI \
-            and board[x + 2][y] == AI \
-            and board[x + 3][y] == EMPTY \
-            and board[x + 4][y] == AI \
-            and board[x + 5][y] == AI \
-            and board[x + 6][y] == PLAYER1:
-        return 23
-    if board[x][y] == PLAYER1 \
-            and board[x + 1][y] == AI \
-            and board[x + 2][y] == AI \
-            and board[x + 3][y] == AI \
-            and board[x + 4][y] == EMPTY \
-            and board[x + 5][y] == AI \
-            and board[x + 6][y] == PLAYER1:
-        return 23
-    return 0
-
-
-# →, 삼목, 5개 체크
-def check_s_1_6(board, x, y):
-    if board[x][y] == EMPTY \
-            and board[x + 1][y] == AI \
-            and board[x + 2][y] == AI \
-            and board[x + 3][y] == AI \
-            and board[x + 4][y] == EMPTY:
-        return 10
-    return 0
-
-
-# →, 상대편 바둑돌이 막고 있는 사목, 6개 체크
-def check_s_1_7(board, x, y):
-    if board[x][y] == EMPTY \
-            and board[x + 1][y] == AI \
-            and board[x + 2][y] == AI \
-            and board[x + 3][y] == AI \
-            and board[x + 4][y] == AI \
-            and board[x + 5][y] == PLAYER1:
-        return 27
-    if board[x][y] == PLAYER1 \
-            and board[x + 1][y] == AI \
-            and board[x + 2][y] == AI \
-            and board[x + 3][y] == AI \
-            and board[x + 4][y] == AI \
-            and board[x + 5][y] == EMPTY:
-        return 27
-    return 0
-
-
-# →, 빈칸 있는 삼목, 6개 체크
-def check_s_1_8(board, x, y):
-    if board[x][y] == EMPTY \
-            and board[x + 1][y] == AI \
-            and board[x + 2][y] == EMPTY \
-            and board[x + 3][y] == AI \
-            and board[x + 4][y] == AI \
-            and board[x + 5][y] == EMPTY:
-        return 7
-    if board[x][y] == EMPTY \
-            and board[x + 1][y] == AI \
-            and board[x + 2][y] == AI \
-            and board[x + 3][y] == EMPTY \
-            and board[x + 4][y] == AI \
-            and board[x + 5][y] == EMPTY:
-        return 7
-    return 0
-
-
-# →, 빈칸이 있고 상대편 바둑돌이 막고 있는 삼목, 6개 체크
-def check_s_1_9(board, x, y):
-    if board[x][y] == EMPTY \
-            and board[x + 1][y] == AI \
-            and board[x + 2][y] == EMPTY \
-            and board[x + 3][y] == AI \
-            and board[x + 4][y] == AI \
-            and board[x + 5][y] == PLAYER1:
-        return 3
-    if board[x][y] == EMPTY \
-            and board[x + 1][y] == AI \
-            and board[x + 2][y] == AI \
-            and board[x + 3][y] == EMPTY \
-            and board[x + 4][y] == AI \
-            and board[x + 5][y] == PLAYER1:
-        return 3
-
-    if board[x][y] == PLAYER1 \
-            and board[x + 1][y] == AI \
-            and board[x + 2][y] == EMPTY \
-            and board[x + 3][y] == AI \
-            and board[x + 4][y] == AI \
-            and board[x + 5][y] == EMPTY:
-        return 3
-    if board[x][y] == PLAYER1 \
-            and board[x + 1][y] == AI \
-            and board[x + 2][y] == AI \
-            and board[x + 3][y] == EMPTY \
-            and board[x + 4][y] == AI \
-            and board[x + 5][y] == EMPTY:
-        return 3
-    return 0
-
-
-# →, 상대편 바둑돌이 막고 있는 삼목, 5개 체크
-def check_s_1_10(board, x, y):
-    if board[x][y] == EMPTY \
-            and board[x + 1][y] == AI \
-            and board[x + 2][y] == AI \
-            and board[x + 3][y] == AI \
-            and board[x + 4][y] == PLAYER1:
-        return 6
-    if board[x][y] == PLAYER1 \
-            and board[x + 1][y] == AI \
-            and board[x + 2][y] == AI \
-            and board[x + 3][y] == AI \
-            and board[x + 4][y] == EMPTY:
-        return 6
-    return 0
-
-
-# →, 이목, 4개 체크
-def check_s_1_11(board, x, y):
-    if board[x][y] == EMPTY\
-            and board[x + 1][y] == AI\
-            and board[x + 2][y] == AI\
-            and board[x + 3][y] == EMPTY:
-        return 2
-    return 0
-
-
-# →, 상대편 바둑돌이 막고 있는 이목, 4개 체크
-def check_s_1_12(board, x, y):
-    if board[x][y] == EMPTY\
-            and board[x + 1][y] == AI\
-            and board[x + 2][y] == AI\
-            and board[x + 3][y] == PLAYER1:
-        return 1
-    if board[x][y] == PLAYER1\
-            and board[x + 1][y] == AI\
-            and board[x + 2][y] == AI\
-            and board[x + 3][y] == EMPTY:
-        return 1
-    return 0
-
-
 def e_function(board):
     score = 0
 
-    # → 체크
     for x in range(0, GO_BOARD_X_COUNT):
         for y in range(0, GO_BOARD_Y_COUNT):
-            if x < GO_BOARD_X_COUNT - 6:
-                score += check_s_1_3(board, x, y)
-                score += check_s_1_4(board, x, y)
-                score += check_s_1_5(board, x, y)
+            # → 체크
+            if x < GO_BOARD_X_COUNT - 7:
+                for z in range(len(AI_7PATTERNS)):
+                    check = True
+                    for k in range(7):
+                        if board[x + k][y] != AI_7PATTERNS[z][k]:
+                            check = False
+                            break
+                    if check:
+                        score += AI_7PATTERNS_SCORE[z]
+            elif x < GO_BOARD_X_COUNT - 6:
+                for z in range(len(AI_6PATTERNS)):
+                    check = True
+                    for k in range(6):
+                        if board[x + k][y] != AI_6PATTERNS[z][k]:
+                            check = False
+                            break
+                    if check:
+                        score += AI_6PATTERNS_SCORE[z]
             elif x < GO_BOARD_X_COUNT - 5:
-                score += check_s_1_2(board, x, y)
-                score += check_s_1_7(board, x, y)
-                score += check_s_1_8(board, x, y)
-                score += check_s_1_9(board, x, y)
+                for z in range(len(AI_5PATTERNS)):
+                    check = True
+                    for k in range(5):
+                        if board[x + k][y] != AI_5PATTERNS[z][k]:
+                            check = False
+                            break
+                    if check:
+                        score += AI_5PATTERNS_SCORE[z]
             elif x < GO_BOARD_X_COUNT - 4:
-                score += check_s_1_1(board, x, y)
-                score += check_s_1_6(board, x, y)
-                score += check_s_1_10(board, x, y)
-            elif x < GO_BOARD_X_COUNT - 3:
-                score += check_s_1_11(board, x, y)
-                score += check_s_1_12(board, x, y)
+                for z in range(len(AI_4PATTERNS)):
+                    check = True
+                    for k in range(4):
+                        if board[x + k][y] != AI_4PATTERNS[z][k]:
+                            check = False
+                            break
+                    if check:
+                        score += AI_4PATTERNS_SCORE[z]
+
+            # ↘ 체크
+            if x < GO_BOARD_X_COUNT - 7 and y < GO_BOARD_Y_COUNT - 7:
+                for z in range(len(AI_7PATTERNS)):
+                    check = True
+                    for k in range(7):
+                        if board[x + k][y + k] != AI_7PATTERNS[z][k]:
+                            check = False
+                            break
+                    if check:
+                        score += AI_7PATTERNS_SCORE[z]
+            elif x < GO_BOARD_X_COUNT - 6 and y < GO_BOARD_Y_COUNT - 6:
+                for z in range(len(AI_6PATTERNS)):
+                    check = True
+                    for k in range(6):
+                        if board[x + k][y + k] != AI_6PATTERNS[z][k]:
+                            check = False
+                            break
+                    if check:
+                        score += AI_6PATTERNS_SCORE[z]
+            elif x < GO_BOARD_X_COUNT - 5 and y < GO_BOARD_Y_COUNT - 5:
+                for z in range(len(AI_5PATTERNS)):
+                    check = True
+                    for k in range(5):
+                        if board[x + k][y + k] != AI_5PATTERNS[z][k]:
+                            check = False
+                            break
+                    if check:
+                        score += AI_5PATTERNS_SCORE[z]
+            elif x < GO_BOARD_X_COUNT - 4 and y < GO_BOARD_Y_COUNT - 4:
+                for z in range(len(AI_4PATTERNS)):
+                    check = True
+                    for k in range(4):
+                        if board[x + k][y + k] != AI_4PATTERNS[z][k]:
+                            check = False
+                            break
+                    if check:
+                        score += AI_4PATTERNS_SCORE[z]
+
+            # ↓ 체크
+            if y < GO_BOARD_Y_COUNT - 7:
+                for z in range(len(AI_7PATTERNS)):
+                    check = True
+                    for k in range(7):
+                        if board[x][y + k] != AI_7PATTERNS[z][k]:
+                            check = False
+                            break
+                    if check:
+                        score += AI_7PATTERNS_SCORE[z]
+            elif y < GO_BOARD_Y_COUNT - 6:
+                for z in range(len(AI_6PATTERNS)):
+                    check = True
+                    for k in range(6):
+                        if board[x][y + k] != AI_6PATTERNS[z][k]:
+                            check = False
+                            break
+                    if check:
+                        score += AI_6PATTERNS_SCORE[z]
+            elif y < GO_BOARD_Y_COUNT - 5:
+                for z in range(len(AI_5PATTERNS)):
+                    check = True
+                    for k in range(5):
+                        if board[x][y + k] != AI_5PATTERNS[z][k]:
+                            check = False
+                            break
+                    if check:
+                        score += AI_5PATTERNS_SCORE[z]
+            elif y < GO_BOARD_Y_COUNT - 4:
+                for z in range(len(AI_4PATTERNS)):
+                    check = True
+                    for k in range(4):
+                        if board[x][y + k] != AI_4PATTERNS[z][k]:
+                            check = False
+                            break
+                    if check:
+                        score += AI_4PATTERNS_SCORE[z]
+
+            # ↙ 체크
+            if x >= 7 and y < GO_BOARD_Y_COUNT - 7:
+                for z in range(len(AI_7PATTERNS)):
+                    check = True
+                    for k in range(7):
+                        if board[x - k][y + k] != AI_7PATTERNS[z][k]:
+                            check = False
+                            break
+                    if check:
+                        score += AI_7PATTERNS_SCORE[z]
+            elif x >= 6 and y < GO_BOARD_Y_COUNT - 6:
+                for z in range(len(AI_6PATTERNS)):
+                    check = True
+                    for k in range(6):
+                        if board[x - k][y + k] != AI_6PATTERNS[z][k]:
+                            check = False
+                            break
+                    if check:
+                        score += AI_6PATTERNS_SCORE[z]
+            elif x >= 5 and y < GO_BOARD_Y_COUNT - 5:
+                for z in range(len(AI_5PATTERNS)):
+                    check = True
+                    for k in range(5):
+                        if board[x - k][y + k] != AI_5PATTERNS[z][k]:
+                            check = False
+                            break
+                    if check:
+                        score += AI_5PATTERNS_SCORE[z]
+            elif x >= 4 and y < GO_BOARD_Y_COUNT - 4:
+                for z in range(len(AI_4PATTERNS)):
+                    check = True
+                    for k in range(4):
+                        if board[x - k][y + k] != AI_4PATTERNS[z][k]:
+                            check = False
+                            break
+                    if check:
+                        score += AI_4PATTERNS_SCORE[z]
 
     return score

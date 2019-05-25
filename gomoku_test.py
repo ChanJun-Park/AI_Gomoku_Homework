@@ -104,7 +104,7 @@ def main():
 
 
         # 흑돌(선수) 처리
-        goBoard[int(GO_BOARD_X_COUNT / 2)][int(GO_BOARD_Y_COUNT / 2)] = turn;
+        goBoard[int(GO_BOARD_X_COUNT / 2)][int(GO_BOARD_Y_COUNT / 2)] = turn
         turn = (PLAYER1 if turn == PLAYER2 else PLAYER2)
 
         stoneCnt = 1
@@ -131,7 +131,7 @@ def main():
             if gameState != CONTINUE:
                 drawFinishEvent(gameState)
                 waitForNewGame()
-                break;
+                break
 
             #AI 차례 처리
             if turn == PLAYER2:
@@ -169,7 +169,7 @@ def main():
                 pygame.mouse.set_cursor(*HAND_CURSOR)
                 if mouseClicked:
                     pygame.mouse.set_cursor(*pygame.cursors.arrow)
-                    break;
+                    break
             else:
                 pygame.mouse.set_cursor(*pygame.cursors.arrow)
 
@@ -234,40 +234,40 @@ def finishCheck(board, cnt):
         for y in range(GO_BOARD_Y_COUNT - 4):
             if(board[x][y]==PLAYER1 and board[x+1][y+1]==PLAYER1 and board[x+2][y+2]==PLAYER1\
                     and board[x+3][y+3]==PLAYER1 and board[x+4][y+4]==PLAYER1) :
-                return PLAYER1;
+                return PLAYER1
             elif(board[x][y]==PLAYER2 and board[x+1][y+1]==PLAYER2 and board[x+2][y+2]==PLAYER2\
                     and board[x+3][y+3]==PLAYER2 and board[x+4][y+4]==PLAYER2) :
-                return PLAYER2;
+                return PLAYER2
 
     # → 오목 체크
     for x in range(GO_BOARD_X_COUNT - 4):
         for y in range(GO_BOARD_Y_COUNT):
             if (board[x][y] == PLAYER1 and board[x + 1][y] == PLAYER1 and board[x + 2][y] == PLAYER1 \
                     and board[x + 3][y] == PLAYER1 and board[x + 4][y] == PLAYER1):
-                return PLAYER1;
+                return PLAYER1
             elif (board[x][y] == PLAYER2 and board[x + 1][y] == PLAYER2 and board[x + 2][y] == PLAYER2 \
                   and board[x + 3][y] == PLAYER2 and board[x + 4][y] == PLAYER2):
-                return PLAYER2;
+                return PLAYER2
 
     # ↓ 오목 체크
     for x in range(GO_BOARD_X_COUNT):
         for y in range(GO_BOARD_Y_COUNT - 4):
             if (board[x][y] == PLAYER1 and board[x][y + 1] == PLAYER1 and board[x][y + 2] == PLAYER1 \
                     and board[x][y + 3] == PLAYER1 and board[x][y + 4] == PLAYER1):
-                return PLAYER1;
+                return PLAYER1
             elif (board[x][y] == PLAYER2 and board[x][y + 1] == PLAYER2 and board[x][y + 2] == PLAYER2 \
                   and board[x][y + 3] == PLAYER2 and board[x][y + 4] == PLAYER2):
-                return PLAYER2;
+                return PLAYER2
 
     # ↙ 오목 체크
     for x in range(4, GO_BOARD_X_COUNT):
         for y in range(4, GO_BOARD_Y_COUNT):
             if (board[x][y] == PLAYER1 and board[x - 1][y + 1] == PLAYER1 and board[x - 2][y + 2] == PLAYER1 \
                     and board[x - 3][y + 3] == PLAYER1 and board[x - 4][y + 4] == PLAYER1):
-                return PLAYER1;
+                return PLAYER1
             elif (board[x][y] == PLAYER2 and board[x - 1][y + 1] == PLAYER2 and board[x - 2][y + 2] == PLAYER2 \
                   and board[x - 3][y + 3] == PLAYER2 and board[x - 4][y + 4] == PLAYER2):
-                return PLAYER2;
+                return PLAYER2
 
     # 무승부 판정
     if cnt == GO_BOARD_X_COUNT * GO_BOARD_Y_COUNT:
@@ -306,18 +306,18 @@ def waitForNewGame():
             pygame.mouse.set_cursor(*HAND_CURSOR)
             if mouseClicked:
                 pygame.mouse.set_cursor(*pygame.cursors.arrow)
-                break;
+                break
         else:
             pygame.mouse.set_cursor(*pygame.cursors.arrow)
     pass
 
 # player1, player2 의 돌의 색깔을 선택하여 반환해준다.
 def selectStoneColor():
-    pygame.draw.rect(DISPLAYSURF, GRAY, (WINDOWWIDTH/2 - 200, WINDOWHEIGHT/2 - 200, 400, 400));
-    OPTION_BLACK_SURF, OPTION_BLACK_RECT = makeText('Black', BLACK, GRAY, WINDOWWIDTH / 2, WINDOWHEIGHT / 2 - 50);
-    OPTION_WHITE_SURF, OPTION_WHITE_RECT = makeText('White', BLACK, GRAY, WINDOWWIDTH / 2, WINDOWHEIGHT / 2 + 50);
-    DISPLAYSURF.blit(OPTION_BLACK_SURF, OPTION_BLACK_RECT);
-    DISPLAYSURF.blit(OPTION_WHITE_SURF, OPTION_WHITE_RECT);
+    pygame.draw.rect(DISPLAYSURF, GRAY, (WINDOWWIDTH/2 - 200, WINDOWHEIGHT/2 - 200, 400, 400))
+    OPTION_BLACK_SURF, OPTION_BLACK_RECT = makeText('Black', BLACK, GRAY, WINDOWWIDTH / 2, WINDOWHEIGHT / 2 - 50)
+    OPTION_WHITE_SURF, OPTION_WHITE_RECT = makeText('White', BLACK, GRAY, WINDOWWIDTH / 2, WINDOWHEIGHT / 2 + 50)
+    DISPLAYSURF.blit(OPTION_BLACK_SURF, OPTION_BLACK_RECT)
+    DISPLAYSURF.blit(OPTION_WHITE_SURF, OPTION_WHITE_RECT)
     pygame.display.update()
 
     mousex = 0
@@ -333,7 +333,7 @@ def selectStoneColor():
             elif event.type == MOUSEMOTION:
                 mousex, mousey = event.pos
             elif event.type == MOUSEBUTTONDOWN:
-                mouseClicked = True;
+                mouseClicked = True
                 mousex, mousey = event.pos
 
 
