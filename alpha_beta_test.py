@@ -1,8 +1,7 @@
 from gomoku_constant import *
 from evaluate import *
 
-
-class Ai1:
+class Ai2:
     def __init__(self, board):
         self.goBoard = board
         self.searchSpace = [int(GO_BOARD_X_COUNT / 2) - 2, int(GO_BOARD_X_COUNT / 2) + 2,

@@ -1,4 +1,4 @@
-from gomoku_test import EMPTY, PLAYER1, PLAYER2, AI
+from gomoku_constant import *
 
 
 PLAYER1_7PATTERNS = [[AI, PLAYER1, EMPTY, PLAYER1, PLAYER1, PLAYER1, AI], # 5. 양쪽에 상대편 바둑돌들이 막고있는 빈칸 하나 있는사목
@@ -84,3 +84,163 @@ DEFENCE_5PATTERNS = [[PLAYER1, EMPTY,PLAYER1,PLAYER1,PLAYER1],         # 빈칸 
                      [PLAYER1,PLAYER1, EMPTY,PLAYER1,PLAYER1],
                      [PLAYER1,PLAYER1,PLAYER1, EMPTY,PLAYER1],
                      [EMPTY,PLAYER1,PLAYER1,PLAYER1, EMPTY]]            # 삼목
+
+
+def e_function(board):
+    score = 0
+
+    for x in range(0, GO_BOARD_X_COUNT):
+        for y in range(0, GO_BOARD_Y_COUNT):
+            # → 체크
+            if x < GO_BOARD_X_COUNT - 7:
+                for z in range(len(AI_7PATTERNS)):
+                    check = True
+                    for k in range(7):
+                        if board[x + k][y] != AI_7PATTERNS[z][k]:
+                            check = False
+                            break
+                    if check:
+                        score += AI_7PATTERNS_SCORE[z]
+            if x < GO_BOARD_X_COUNT - 6:
+                for z in range(len(AI_6PATTERNS)):
+                    check = True
+                    for k in range(6):
+                        if board[x + k][y] != AI_6PATTERNS[z][k]:
+                            check = False
+                            break
+                    if check:
+                        score += AI_6PATTERNS_SCORE[z]
+            if x < GO_BOARD_X_COUNT - 5:
+                for z in range(len(AI_5PATTERNS)):
+                    check = True
+                    for k in range(5):
+                        if board[x + k][y] != AI_5PATTERNS[z][k]:
+                            check = False
+                            break
+                    if check:
+                        score += AI_5PATTERNS_SCORE[z]
+            if x < GO_BOARD_X_COUNT - 4:
+                for z in range(len(AI_4PATTERNS)):
+                    check = True
+                    for k in range(4):
+                        if board[x + k][y] != AI_4PATTERNS[z][k]:
+                            check = False
+                            break
+                    if check:
+                        score += AI_4PATTERNS_SCORE[z]
+
+            # ↘ 체크
+            if x < GO_BOARD_X_COUNT - 7 and y < GO_BOARD_Y_COUNT - 7:
+                for z in range(len(AI_7PATTERNS)):
+                    check = True
+                    for k in range(7):
+                        if board[x + k][y + k] != AI_7PATTERNS[z][k]:
+                            check = False
+                            break
+                    if check:
+                        score += AI_7PATTERNS_SCORE[z]
+            if x < GO_BOARD_X_COUNT - 6 and y < GO_BOARD_Y_COUNT - 6:
+                for z in range(len(AI_6PATTERNS)):
+                    check = True
+                    for k in range(6):
+                        if board[x + k][y + k] != AI_6PATTERNS[z][k]:
+                            check = False
+                            break
+                    if check:
+                        score += AI_6PATTERNS_SCORE[z]
+            if x < GO_BOARD_X_COUNT - 5 and y < GO_BOARD_Y_COUNT - 5:
+                for z in range(len(AI_5PATTERNS)):
+                    check = True
+                    for k in range(5):
+                        if board[x + k][y + k] != AI_5PATTERNS[z][k]:
+                            check = False
+                            break
+                    if check:
+                        score += AI_5PATTERNS_SCORE[z]
+            if x < GO_BOARD_X_COUNT - 4 and y < GO_BOARD_Y_COUNT - 4:
+                for z in range(len(AI_4PATTERNS)):
+                    check = True
+                    for k in range(4):
+                        if board[x + k][y + k] != AI_4PATTERNS[z][k]:
+                            check = False
+                            break
+                    if check:
+                        score += AI_4PATTERNS_SCORE[z]
+
+            # ↓ 체크
+            if y < GO_BOARD_Y_COUNT - 7:
+                for z in range(len(AI_7PATTERNS)):
+                    check = True
+                    for k in range(7):
+                        if board[x][y + k] != AI_7PATTERNS[z][k]:
+                            check = False
+                            break
+                    if check:
+                        score += AI_7PATTERNS_SCORE[z]
+            if y < GO_BOARD_Y_COUNT - 6:
+                for z in range(len(AI_6PATTERNS)):
+                    check = True
+                    for k in range(6):
+                        if board[x][y + k] != AI_6PATTERNS[z][k]:
+                            check = False
+                            break
+                    if check:
+                        score += AI_6PATTERNS_SCORE[z]
+            if y < GO_BOARD_Y_COUNT - 5:
+                for z in range(len(AI_5PATTERNS)):
+                    check = True
+                    for k in range(5):
+                        if board[x][y + k] != AI_5PATTERNS[z][k]:
+                            check = False
+                            break
+                    if check:
+                        score += AI_5PATTERNS_SCORE[z]
+            if y < GO_BOARD_Y_COUNT - 4:
+                for z in range(len(AI_4PATTERNS)):
+                    check = True
+                    for k in range(4):
+                        if board[x][y + k] != AI_4PATTERNS[z][k]:
+                            check = False
+                            break
+                    if check:
+                        score += AI_4PATTERNS_SCORE[z]
+
+            # ↙ 체크
+            if x >= 7 and y < GO_BOARD_Y_COUNT - 7:
+                for z in range(len(AI_7PATTERNS)):
+                    check = True
+                    for k in range(7):
+                        if board[x - k][y + k] != AI_7PATTERNS[z][k]:
+                            check = False
+                            break
+                    if check:
+                        score += AI_7PATTERNS_SCORE[z]
+            if x >= 6 and y < GO_BOARD_Y_COUNT - 6:
+                for z in range(len(AI_6PATTERNS)):
+                    check = True
+                    for k in range(6):
+                        if board[x - k][y + k] != AI_6PATTERNS[z][k]:
+                            check = False
+                            break
+                    if check:
+                        score += AI_6PATTERNS_SCORE[z]
+            if x >= 5 and y < GO_BOARD_Y_COUNT - 5:
+                for z in range(len(AI_5PATTERNS)):
+                    check = True
+                    for k in range(5):
+                        if board[x - k][y + k] != AI_5PATTERNS[z][k]:
+                            check = False
+                            break
+                    if check:
+                        score += AI_5PATTERNS_SCORE[z]
+            if x >= 4 and y < GO_BOARD_Y_COUNT - 4:
+                for z in range(len(AI_4PATTERNS)):
+                    check = True
+                    for k in range(4):
+                        if board[x - k][y + k] != AI_4PATTERNS[z][k]:
+                            check = False
+                            break
+                    if check:
+                        score += AI_4PATTERNS_SCORE[z]
+
+    return score
