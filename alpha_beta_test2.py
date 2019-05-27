@@ -1,13 +1,27 @@
+# 큐를 이용해서 search space 관리
+
 from gomoku_constant import *
 from evaluate import *
 
 class Ai2:
     def __init__(self, board):
         self.goBoard = board
-        self.searchSpace = [int(GO_BOARD_X_COUNT / 2) - 2, int(GO_BOARD_X_COUNT / 2) + 2,
-                            int(GO_BOARD_Y_COUNT / 2) - 2, int(GO_BOARD_Y_COUNT / 2) + 2]
+        self.searchSpaceState, self.searchSpace = self.getInitialSearchSpaceState()
         self.stoneCnt = 1
         pass
+
+    def getInitialSearchSpaceState(self):
+        board = []
+        searchSpace = []
+        for i in range(GO_BOARD_X_COUNT):
+            board.append([EMPTY] * GO_BOARD_Y_COUNT)
+        for i in range(int(GO_BOARD_X_COUNT / 2) - 2, int(GO_BOARD_X_COUNT / 2) + 3):
+            for j in range(int(GO_BOARD_Y_COUNT / 2) - 2, int(GO_BOARD_Y_COUNT / 2) + 3):
+                board[i][j] = True
+                if i == j:
+                    continue
+                searchSpace.append((i, j))
+        return board
 
     def resetSearchSpace(self, x, y):
         if self.searchSpace[0] > x:
