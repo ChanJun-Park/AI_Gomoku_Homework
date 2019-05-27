@@ -3,7 +3,8 @@
 from gomoku_constant import *
 from evaluate import *
 
-class Ai2:
+
+class Ai3:
     def __init__(self, board):
         self.goBoard = board
         self.searchSpaceState, self.searchSpace = self.getInitialSearchSpaceState()
@@ -21,17 +22,25 @@ class Ai2:
                 if i == j:
                     continue
                 searchSpace.append((i, j))
-        return board
+        return board, searchSpace
 
     def resetSearchSpace(self, x, y):
-        if self.searchSpace[0] > x:
-            self.searchSpace[0] = (x - 2 if x > 1 else x)
-        if self.searchSpace[1] < x:
-            self.searchSpace[1] = (x + 2 if x < GO_BOARD_X_COUNT - 2 else x)
-        if self.searchSpace[2] > y:
-            self.searchSpace[2] = (y - 2 if y > 1 else y)
-        if self.searchSpace[3] < y:
-            self.searchSpace[3] = (y + 2 if y < GO_BOARD_Y_COUNT - 2 else y)
+        self.searchSpaceState[x][y] = True
+        for i in range(len(self.searchSpace)):
+            if self.searchSpace[i] == (x, y):
+                del self.searchSpace[i]
+                break
+
+        left = x - 2 if x - 2 >= 0 else 0
+        right = x + 2 if x + 2 < GO_BOARD_X_COUNT else GO_BOARD_X_COUNT - 1
+        top = y - 2 if y - 2 >= 0 else 0
+        bottom = y + 2 if y + 2 < GO_BOARD_Y_COUNT else GO_BOARD_Y_COUNT - 1
+        for i in range(left, right):
+            for j in range(top, bottom):
+                if self.searchSpaceState[i][j]:
+                    continue
+                self.searchSpaceState[i][j] = True
+                self.searchSpace.append((i, j))
         pass
 
     def minmaxWithAlphaBeta(self, alpha, beta, depth, player):
@@ -41,24 +50,20 @@ class Ai2:
             maxValue = -INF
             x = 0
             y = 0
-            checkBetaCut = False
-            for i in range(self.searchSpace[0], self.searchSpace[1] + 1):
-                for j in range(self.searchSpace[2], self.searchSpace[3] + 1):
-                    if self.goBoard[i][j] == EMPTY:
-                        self.goBoard[i][j] = AI
-                        ret = self.minmaxWithAlphaBeta(alpha, beta, depth - 1, PLAYER1)
-                        if ret[0] > maxValue:
-                            maxValue = ret[0]
-                            x = i
-                            y = j
-                            alpha = max(alpha, maxValue)
-                        self.goBoard[i][j] = EMPTY
-                        if beta <= alpha:
-                            checkBetaCut = True
-                            break
-                if checkBetaCut:
-                    break
-            if depth == 1:
+            for k in self.searchSpace:
+                i, j = k
+                if self.goBoard[i][j] == EMPTY:
+                    self.goBoard[i][j] = AI
+                    ret = self.minmaxWithAlphaBeta(alpha, beta, depth - 1, PLAYER1)
+                    if ret[0] > maxValue:
+                        maxValue = ret[0]
+                        x = i
+                        y = j
+                        alpha = max(alpha, maxValue)
+                    self.goBoard[i][j] = EMPTY
+                    if beta <= alpha:  # Beta Cut
+                        break
+            if depth == 2:
                 return (maxValue, x, y)
             else:
                 return (maxValue, None, None)
@@ -67,24 +72,20 @@ class Ai2:
             minValue = INF
             x = 0
             y = 0
-            checkAlphaCut = False
-            for i in range(self.searchSpace[0], self.searchSpace[1] + 1):
-                for j in range(self.searchSpace[2], self.searchSpace[3] + 1):
-                    if self.goBoard[i][j] == EMPTY:
-                        self.goBoard[i][j] = PLAYER1
-                        ret = self.minmaxWithAlphaBeta(alpha, beta, depth - 1, AI)
-                        if ret[0] < minValue:
-                            minValue = ret[0]
-                            x = i
-                            y = j
-                            beta = min(beta, minValue)
-                        self.goBoard[i][j] = EMPTY
-                        if beta <= alpha:
-                            checkAlphaCut = True
-                            break
-                    if checkAlphaCut:
+            for k in self.searchSpace:
+                i, j = k
+                if self.goBoard[i][j] == EMPTY:
+                    self.goBoard[i][j] = PLAYER1
+                    ret = self.minmaxWithAlphaBeta(alpha, beta, depth - 1, AI)
+                    if ret[0] < minValue:
+                        minValue = ret[0]
+                        x = i
+                        y = j
+                        beta = min(beta, minValue)
+                    self.goBoard[i][j] = EMPTY
+                    if beta <= alpha:  # Alpha Cut
                         break
-            if depth == 1:
+            if depth == 2:
                 return (minValue, x, y)
             else:
                 return (minValue, None, None)
@@ -226,7 +227,7 @@ class Ai2:
         x, y = self.defence()
 
         if x is None or y is None:
-            place = self.minmaxWithAlphaBeta(-INF, INF, 1, AI)
+            place = self.minmaxWithAlphaBeta(-INF, INF, 2, AI)
             x = place[1]
             y = place[2]
 

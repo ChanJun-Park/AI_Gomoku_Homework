@@ -16,6 +16,7 @@ from pygame.locals import *
 from gomoku_constant import *
 import minmax_test
 import alpha_beta_test
+import alpha_beta_test2
 
 def main():
     global DISPLAYSURF, BASICFONT,\
@@ -69,7 +70,7 @@ def main():
         elif level == 2:
             ai = alpha_beta_test.Ai2(goBoard)
         else:
-            pass
+            ai = alpha_beta_test2.Ai3(goBoard)
 
         # 메인 게임 루프
         while True:
