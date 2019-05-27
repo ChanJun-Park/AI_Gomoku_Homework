@@ -68,7 +68,6 @@ def main():
             ai = minmax_test.Ai1(goBoard)
         elif level == 2:
             ai = alpha_beta_test.Ai2(goBoard)
-            pass
         else:
             pass
 

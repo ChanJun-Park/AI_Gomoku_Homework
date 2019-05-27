@@ -20,25 +20,31 @@ class Ai2:
             self.searchSpace[3] = (y + 2 if y < GO_BOARD_Y_COUNT - 2 else y)
         pass
 
-    def minmax(self, depth, player):
+    def minmaxWithAlphaBeta(self, alpha, beta, depth, player):
         if depth == 0 or self.stoneCnt == GO_BOARD_X_COUNT * GO_BOARD_Y_COUNT:
             return (e_function(self.goBoard), None, None)
         if player == AI:
             maxValue = -INF
             x = 0
             y = 0
+            checkBetaCut = False
             for i in range(self.searchSpace[0], self.searchSpace[1] + 1):
                 for j in range(self.searchSpace[2], self.searchSpace[3] + 1):
                     if self.goBoard[i][j] == EMPTY:
                         self.goBoard[i][j] = AI
-                        ret = self.minmax(depth - 1, PLAYER1)
+                        ret = self.minmaxWithAlphaBeta(alpha, beta, depth - 1, PLAYER1)
                         if ret[0] > maxValue:
                             maxValue = ret[0]
                             x = i
                             y = j
+                            alpha = max(alpha, maxValue)
                         self.goBoard[i][j] = EMPTY
-
-            if depth == 1:
+                        if beta <= alpha:
+                            checkBetaCut = True
+                            break
+                if checkBetaCut:
+                    break
+            if depth == 2:
                 return (maxValue, x, y)
             else:
                 return (maxValue, None, None)
@@ -47,17 +53,24 @@ class Ai2:
             minValue = INF
             x = 0
             y = 0
+            checkAlphaCut = False
             for i in range(self.searchSpace[0], self.searchSpace[1] + 1):
                 for j in range(self.searchSpace[2], self.searchSpace[3] + 1):
                     if self.goBoard[i][j] == EMPTY:
                         self.goBoard[i][j] = PLAYER1
-                        ret = self.minmax(depth - 1, AI)
+                        ret = self.minmaxWithAlphaBeta(alpha, beta, depth - 1, AI)
                         if ret[0] < minValue:
                             minValue = ret[0]
                             x = i
                             y = j
+                            beta = min(beta, minValue)
                         self.goBoard[i][j] = EMPTY
-            if depth == 1:
+                        if beta <= alpha:
+                            checkAlphaCut = True
+                            break
+                    if checkAlphaCut:
+                        break
+            if depth == 2:
                 return (minValue, x, y)
             else:
                 return (minValue, None, None)
@@ -199,7 +212,7 @@ class Ai2:
         x, y = self.defence()
 
         if x is None or y is None:
-            place = self.minmax(1, AI)
+            place = self.minmaxWithAlphaBeta(-INF, INF, 2, AI)
             x = place[1]
             y = place[2]
 
