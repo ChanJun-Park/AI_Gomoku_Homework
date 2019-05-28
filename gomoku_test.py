@@ -18,6 +18,7 @@ import minmax_test
 import alpha_beta_test
 import alpha_beta_test2
 import alpha_beta_test3
+import alpha_beta_test4
 
 def main():
     global DISPLAYSURF, BASICFONT,\
@@ -72,7 +73,8 @@ def main():
         #     ai = alpha_beta_test.Ai2(goBoard)
         # else:
         #     ai = alpha_beta_test2.Ai3(goBoard)
-        ai = alpha_beta_test3.Ai4(goBoard)
+        # ai = alpha_beta_test3.Ai4(goBoard)
+        ai = alpha_beta_test4.Ai5(goBoard)
 
         # 메인 게임 루프
         while True:
