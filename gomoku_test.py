@@ -17,6 +17,7 @@ from gomoku_constant import *
 import minmax_test
 import alpha_beta_test
 import alpha_beta_test2
+import alpha_beta_test3
 
 def main():
     global DISPLAYSURF, BASICFONT,\
@@ -65,12 +66,13 @@ def main():
         # AI 객체 생성 (여기서 난이도 조절?)
         ai = None
         level = selectLevel()
-        if level == 1:
-            ai = minmax_test.Ai1(goBoard)
-        elif level == 2:
-            ai = alpha_beta_test.Ai2(goBoard)
-        else:
-            ai = alpha_beta_test2.Ai3(goBoard)
+        # if level == 1:
+        #     ai = minmax_test.Ai1(goBoard)
+        # elif level == 2:
+        #     ai = alpha_beta_test.Ai2(goBoard)
+        # else:
+        #     ai = alpha_beta_test2.Ai3(goBoard)
+        ai = alpha_beta_test3.Ai4(goBoard)
 
         # 메인 게임 루프
         while True:
@@ -112,6 +114,7 @@ def main():
                     stoneCnt += 1
                     ai.stoneCnt += 1
                     ai.resetSearchSpace(boardx, boardy)
+                    ai.resetEvaluationSpace(boardx, boardy)
                     turn = (PLAYER1 if turn == PLAYER2 else PLAYER2)
                     pass
                 pass

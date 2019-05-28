@@ -4,10 +4,12 @@ from gomoku_constant import *
 from evaluate import *
 
 
-class Ai3:
+class Ai4:
     def __init__(self, board):
         self.goBoard = board
         self.searchSpaceState, self.searchSpace = self.getInitialSearchSpaceState()
+        self.evaluationSpace = [int(GO_BOARD_X_COUNT / 2) - 2, int(GO_BOARD_X_COUNT / 2) + 2,
+                                int(GO_BOARD_Y_COUNT / 2) - 2, int(GO_BOARD_Y_COUNT / 2) + 2]
         self.stoneCnt = 1
         pass
 
@@ -43,9 +45,129 @@ class Ai3:
                 self.searchSpace.append((i, j))
         pass
 
+    def resetEvaluationSpace(self, x, y):
+        if self.evaluationSpace[0] > x:
+            self.evaluationSpace[0] = (x - 2 if x > 1 else x)
+        if self.evaluationSpace[1] < x:
+            self.evaluationSpace[1] = (x + 2 if x < GO_BOARD_X_COUNT - 2 else x)
+        if self.evaluationSpace[2] > y:
+            self.evaluationSpace[2] = (y - 2 if y > 1 else y)
+        if self.evaluationSpace[3] < y:
+            self.evaluationSpace[3] = (y + 2 if y < GO_BOARD_Y_COUNT - 2 else y)
+        pass
+
+    def checkHorizontal(self, x, y, length, pattern, pattern_score):
+        ret = 0
+        if x < GO_BOARD_X_COUNT - length:
+            for z in range(len(pattern)):
+                check = True
+                for k in range(length):
+                    if self.goBoard[x + k][y] != pattern[z][k]:
+                        check = False
+                        break
+                if check:
+                    ret += pattern_score[z]
+        return ret
+
+    def checkVertical(self, x, y, length, pattern, pattern_score):
+        ret = 0
+        if y < GO_BOARD_Y_COUNT - length:
+            for z in range(len(pattern)):
+                check = True
+                for k in range(length):
+                    if self.goBoard[x][y + k] != pattern[z][k]:
+                        check = False
+                        break
+                if check:
+                    ret += pattern_score[z]
+        return ret
+
+    def checkMainDiag(self, x, y, length, pattern, pattern_score):
+        ret = 0
+        if x < GO_BOARD_X_COUNT - length and y < GO_BOARD_Y_COUNT - length:
+            for z in range(len(pattern)):
+                check = True
+                for k in range(length):
+                    if self.goBoard[x + k][y + k] != pattern[z][k]:
+                        check = False
+                        break
+                if check:
+                    ret += pattern_score[z]
+        return ret
+
+    def checkSubDiag(self, x, y, length, pattern, pattern_score):
+        ret = 0
+        if x >= length and y < GO_BOARD_Y_COUNT - length:
+            for z in range(len(pattern)):
+                check = True
+                for k in range(length):
+                    if self.goBoard[x - k][y + k] != pattern[z][k]:
+                        check = False
+                        break
+                if check:
+                    ret += pattern_score[z]
+        return ret
+
+    def evaluate(self):
+        ai_score = 0
+        player_score = 0
+
+        for x in range(self.evaluationSpace[0], self.evaluationSpace[1] + 1):
+            for y in range(self.evaluationSpace[2], self.evaluationSpace[3] + 1):
+                # → 체크
+                ai_score += self.checkHorizontal(x, y, 7, AI_7PATTERNS, AI_7PATTERNS_SCORE)
+                ai_score += self.checkHorizontal(x, y, 6, AI_6PATTERNS, AI_6PATTERNS_SCORE)
+                ai_score += self.checkHorizontal(x, y, 5, AI_5PATTERNS, AI_5PATTERNS_SCORE)
+                ai_score += self.checkHorizontal(x, y, 4, AI_4PATTERNS, AI_4PATTERNS_SCORE)
+
+                # ↘ 체크
+                ai_score += self.checkMainDiag(x, y, 7, AI_7PATTERNS, AI_7PATTERNS_SCORE)
+                ai_score += self.checkMainDiag(x, y, 6, AI_6PATTERNS, AI_6PATTERNS_SCORE)
+                ai_score += self.checkMainDiag(x, y, 5, AI_5PATTERNS, AI_5PATTERNS_SCORE)
+                ai_score += self.checkMainDiag(x, y, 4, AI_4PATTERNS, AI_4PATTERNS_SCORE)
+
+                # ↓ 체크
+                ai_score += self.checkVertical(x, y, 7, AI_7PATTERNS, AI_7PATTERNS_SCORE)
+                ai_score += self.checkVertical(x, y, 6, AI_6PATTERNS, AI_6PATTERNS_SCORE)
+                ai_score += self.checkVertical(x, y, 5, AI_5PATTERNS, AI_5PATTERNS_SCORE)
+                ai_score += self.checkVertical(x, y, 4, AI_4PATTERNS, AI_4PATTERNS_SCORE)
+
+                # ↙ 체크
+                ai_score += self.checkSubDiag(x, y, 7, AI_7PATTERNS, AI_7PATTERNS_SCORE)
+                ai_score += self.checkSubDiag(x, y, 6, AI_6PATTERNS, AI_6PATTERNS_SCORE)
+                ai_score += self.checkSubDiag(x, y, 5, AI_5PATTERNS, AI_5PATTERNS_SCORE)
+                ai_score += self.checkSubDiag(x, y, 4, AI_4PATTERNS, AI_4PATTERNS_SCORE)
+
+                # 플레이어 스코어 체크
+                # → 체크
+                player_score += self.checkHorizontal(x, y, 7, PLAYER1_7PATTERNS, PLAYER1_7PATTERNS_SCORE)
+                player_score += self.checkHorizontal(x, y, 6, PLAYER1_6PATTERNS, PLAYER1_6PATTERNS_SCORE)
+                player_score += self.checkHorizontal(x, y, 5, PLAYER1_5PATTERNS, PLAYER1_5PATTERNS_SCORE)
+                player_score += self.checkHorizontal(x, y, 4, PLAYER1_4PATTERNS, PLAYER1_4PATTERNS_SCORE)
+
+                # ↘ 체크
+                player_score += self.checkMainDiag(x, y, 7, PLAYER1_7PATTERNS, PLAYER1_7PATTERNS_SCORE)
+                player_score += self.checkMainDiag(x, y, 6, PLAYER1_6PATTERNS, PLAYER1_6PATTERNS_SCORE)
+                player_score += self.checkMainDiag(x, y, 5, PLAYER1_5PATTERNS, PLAYER1_5PATTERNS_SCORE)
+                player_score += self.checkMainDiag(x, y, 4, PLAYER1_4PATTERNS, PLAYER1_4PATTERNS_SCORE)
+
+                # ↓ 체크
+                player_score += self.checkVertical(x, y, 7, PLAYER1_7PATTERNS, PLAYER1_7PATTERNS_SCORE)
+                player_score += self.checkVertical(x, y, 6, PLAYER1_6PATTERNS, PLAYER1_6PATTERNS_SCORE)
+                player_score += self.checkVertical(x, y, 5, PLAYER1_5PATTERNS, PLAYER1_5PATTERNS_SCORE)
+                player_score += self.checkVertical(x, y, 4, PLAYER1_4PATTERNS, PLAYER1_4PATTERNS_SCORE)
+
+                # ↙ 체크
+                player_score += self.checkSubDiag(x, y, 7, PLAYER1_7PATTERNS, PLAYER1_7PATTERNS_SCORE)
+                player_score += self.checkSubDiag(x, y, 6, PLAYER1_6PATTERNS, PLAYER1_6PATTERNS_SCORE)
+                player_score += self.checkSubDiag(x, y, 5, PLAYER1_5PATTERNS, PLAYER1_5PATTERNS_SCORE)
+                player_score += self.checkSubDiag(x, y, 4, PLAYER1_4PATTERNS, PLAYER1_4PATTERNS_SCORE)
+
+        return ai_score - player_score
+
     def minmaxWithAlphaBeta(self, alpha, beta, depth, player):
         if depth == 0 or self.stoneCnt == GO_BOARD_X_COUNT * GO_BOARD_Y_COUNT:
-            return (e_function(self.goBoard), None, None)
+            return (self.evaluate(), None, None)
         if player == AI:
             maxValue = -INF
             x = 0
@@ -224,19 +346,20 @@ class Ai3:
         return (None, None)
 
     def placement(self):
-        x, y = self.defence()
+        #x, y = self.defence()
 
-        if x is None or y is None:
-           place = self.minmaxWithAlphaBeta(-INF, INF, 2, AI)
-           x = place[1]
-           y = place[2]
+        #if x is None or y is None:
+        #    place = self.minmaxWithAlphaBeta(-INF, INF, 2, AI)
+        #    x = place[1]
+        #    y = place[2]
 
-        # place = self.minmaxWithAlphaBeta(-INF, INF, 2, AI)
-        # x = place[1]
-        # y = place[2]
+        place = self.minmaxWithAlphaBeta(-INF, INF, 2, AI)
+        x = place[1]
+        y = place[2]
         self.goBoard[x][y] = AI
         self.stoneCnt += 1
         self.resetSearchSpace(x, y)
+        self.resetEvaluationSpace(x, y)
         return True
 
     pass

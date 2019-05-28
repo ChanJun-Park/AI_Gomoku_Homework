@@ -1,11 +1,11 @@
 from gomoku_constant import *
 
 
-PLAYER1_7PATTERNS = [[AI, PLAYER1, EMPTY, PLAYER1, PLAYER1, PLAYER1, AI], # 5. 양쪽에 상대편 바둑돌들이 막고있는 빈칸 하나 있는사목
+PLAYER1_7PATTERNS = [[AI, PLAYER1, EMPTY, PLAYER1, PLAYER1, PLAYER1, AI],  # 5. 양쪽에 상대편 바둑돌들이 막고있는 빈칸 하나 있는사목
                      [AI, PLAYER1, PLAYER1, EMPTY, PLAYER1, PLAYER1, AI],
                      [AI, PLAYER1, PLAYER1, PLAYER1, EMPTY, PLAYER1, AI]]
-PLAYER1_6PATTERNS = [[EMPTY, PLAYER1, PLAYER1, PLAYER1, PLAYER1, EMPTY], # 2. 사목
-                     [PLAYER1, PLAYER1, PLAYER1, EMPTY, PLAYER1, AI],   # 4. 상대편 바둑돌이 막고 있고 빈칸 하나 있는 사목
+PLAYER1_6PATTERNS = [[EMPTY, PLAYER1, PLAYER1, PLAYER1, PLAYER1, EMPTY],   # 2. 사목
+                     [PLAYER1, PLAYER1, PLAYER1, EMPTY, PLAYER1, AI],      # 4. 상대편 바둑돌이 막고 있고 빈칸 하나 있는 사목
                      [PLAYER1, PLAYER1, EMPTY, PLAYER1, PLAYER1, AI],
                      [PLAYER1, EMPTY, PLAYER1, PLAYER1, PLAYER1, AI],
                      [AI, PLAYER1, PLAYER1, PLAYER1, EMPTY, PLAYER1],
@@ -29,6 +29,11 @@ PLAYER1_5PATTERNS = [[PLAYER1, PLAYER1, PLAYER1, PLAYER1, PLAYER1],     # 1. 오
 PLAYER1_4PATTERNS = [[EMPTY, PLAYER1, PLAYER1, EMPTY],                  # 11. 이목
                      [EMPTY, PLAYER1, PLAYER1, AI],                     # 12. 상대편 바둑돌이 막고 있는 이목
                      [AI, PLAYER1, PLAYER1, EMPTY]]
+
+PLAYER1_7PATTERNS_SCORE = [23, 23, 23]
+PLAYER1_6PATTERNS_SCORE = [70, 32, 32, 32, 32, 32, 32, 27, 27, 7, 7, 3, 3, 3, 3]
+PLAYER1_5PATTERNS_SCORE = [10000, 33, 33, 33, 10, 6, 6]
+PLAYER1_4PATTERNS_SCORE = [2, 1, 1]
 
 
 AI_7PATTERNS = [[PLAYER1, AI, EMPTY, AI, AI, AI, PLAYER1], # 5. 양쪽에 상대편 바둑돌들이 막고있는 빈칸 하나 있는사목
