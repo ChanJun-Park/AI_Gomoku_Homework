@@ -30,13 +30,17 @@ PLAYER1_4PATTERNS = [[EMPTY, PLAYER1, PLAYER1, EMPTY],                  # 11. �
                      [EMPTY, PLAYER1, PLAYER1, AI],                     # 12. 상대편 바둑돌이 막고 있는 이목
                      [AI, PLAYER1, PLAYER1, EMPTY]]
 
+#                          5.          3.             4.
 PLAYER1_7PATTERNS_SCORE = [23, 23, 23, 100, 100, 100, 50, 50, 50, 50, 50, 50]
+#                          2.    7.      8.      9.
 PLAYER1_6PATTERNS_SCORE = [1000, 27, 27, 20, 20, 10, 10, 10, 10]
-PLAYER1_5PATTERNS_SCORE = [10000, 30, 6, 6]
+#                          1.     6.  10.
+PLAYER1_5PATTERNS_SCORE = [10000, 100, 6, 6]
+#                         11. 12.
 PLAYER1_4PATTERNS_SCORE = [2, 1, 1]
 
 
-AI_7PATTERNS = [[PLAYER1, AI, EMPTY, AI, AI, AI, PLAYER1], # 5. 양쪽에 상대편 바둑돌들이 막고있는 빈칸 하나 있는사목
+AI_7PATTERNS = [[PLAYER1, AI, EMPTY, AI, AI, AI, PLAYER1],  # 5. 양쪽에 상대편 바둑돌들이 막고있는 빈칸 하나 있는사목
                 [PLAYER1, AI, AI, EMPTY, AI, AI, PLAYER1],
                 [PLAYER1, AI, AI, AI, EMPTY, AI, PLAYER1],
                 [EMPTY, AI, EMPTY, AI, AI, AI, EMPTY],  # 3. 빈칸 하나 있는 사목
@@ -48,7 +52,7 @@ AI_7PATTERNS = [[PLAYER1, AI, EMPTY, AI, AI, AI, PLAYER1], # 5. 양쪽에 상대
                 [PLAYER1, AI, AI, AI, EMPTY, AI, EMPTY],
                 [PLAYER1, AI, AI, EMPTY, AI, AI, EMPTY],
                 [PLAYER1, AI, EMPTY, AI, AI, AI, EMPTY]]
-AI_6PATTERNS = [[EMPTY, AI, AI, AI, AI, EMPTY], # 2. 사목
+AI_6PATTERNS = [[EMPTY, AI, AI, AI, AI, EMPTY],     # 2. 사목
                 [EMPTY, AI, AI, AI, AI, PLAYER1],   # 7. 상대편 바둑돌이 막고 있는 사목
                 [PLAYER1, AI, AI, AI, AI, EMPTY],
                 [EMPTY, AI, EMPTY, AI, AI, EMPTY],   # 8. 빈칸 있는 삼목
@@ -65,30 +69,51 @@ AI_4PATTERNS = [[EMPTY, AI, AI, EMPTY],                  # 11. 이목
                 [EMPTY, AI, AI, PLAYER1],                # 12. 상대편 바둑돌이 막고 있는 이목
                 [PLAYER1, AI, AI, EMPTY]]
 
+#                     5.          3.          4.
 AI_7PATTERNS_SCORE = [23, 23, 23, 33, 33, 33, 32, 32, 32, 32, 32, 32]
+#                     2.  7.      8.    9.
 AI_6PATTERNS_SCORE = [70, 27, 27, 7, 7, 3, 3, 3, 3]
+#                     1.     6.  10.
 AI_5PATTERNS_SCORE = [10000, 10, 6, 6]
+#                    11. 12.
 AI_4PATTERNS_SCORE = [2, 1, 1]
 
+# 첫 번째 EMPTY에 착수하면 되는 끝내기 패턴
+AI_ENDGAME_PATTERN1 = [[PLAYER1, AI, EMPTY, AI, AI, AI, PLAYER1],  # 5. 양쪽에 상대편 바둑돌들이 막고있는 빈칸 하나 있는사목
+                       [PLAYER1, AI, AI, EMPTY, AI, AI, PLAYER1],
+                       [PLAYER1, AI, AI, AI, EMPTY, AI, PLAYER1],
+                       [PLAYER1, AI, AI, AI, EMPTY, AI, EMPTY],    # 4. 상대편 바둑돌이 막고 있고 빈칸 하나 있는 사목
+                       [PLAYER1, AI, AI, EMPTY, AI, AI, EMPTY],
+                       [PLAYER1, AI, EMPTY, AI, AI, AI, EMPTY],
+                       [EMPTY, AI, AI, AI, AI, EMPTY],     # 2. 사목
+                       [EMPTY, AI, AI, AI, AI, PLAYER1],   # 7. 상대편 바둑돌이 막고 있는 사목
+                       [PLAYER1, AI, AI, AI, AI, EMPTY]]
 
-DEFENCE_7PATTERNS = [[AI,PLAYER1, EMPTY,PLAYER1,PLAYER1,PLAYER1, AI], # 5. 양쪽에 상대편 바둑돌들이 막고있는 빈칸 하나 있는사목
-                     [AI,PLAYER1,PLAYER1, EMPTY,PLAYER1,PLAYER1, AI],
-                     [AI,PLAYER1,PLAYER1,PLAYER1, EMPTY,PLAYER1, AI]]
-DEFENCE_6PATTERNS = [[EMPTY,PLAYER1,PLAYER1,PLAYER1,PLAYER1, EMPTY],   # 열린 사목
-                     [PLAYER1,PLAYER1,PLAYER1, EMPTY,PLAYER1, AI],     # 상대편이 막고있고 빈칸 하나 있는 사목
-                     [PLAYER1,PLAYER1, EMPTY,PLAYER1,PLAYER1, AI],
-                     [PLAYER1, EMPTY,PLAYER1,PLAYER1,PLAYER1, AI],
-                     [AI,PLAYER1,PLAYER1,PLAYER1, EMPTY,PLAYER1],
-                     [AI,PLAYER1,PLAYER1, EMPTY,PLAYER1,PLAYER1],
-                     [AI,PLAYER1, EMPTY,PLAYER1,PLAYER1,PLAYER1],
-                     [EMPTY,PLAYER1,PLAYER1,PLAYER1,PLAYER1, AI],      # 상대편이 막고있는 사목
-                     [AI, PLAYER1, PLAYER1, PLAYER1, PLAYER1, EMPTY],
-                     [EMPTY,PLAYER1, EMPTY,PLAYER1,PLAYER1, EMPTY],  # 8. 빈칸 있는 삼목
-                     [EMPTY,PLAYER1,PLAYER1, EMPTY,PLAYER1, EMPTY]]
-DEFENCE_5PATTERNS = [[PLAYER1, EMPTY,PLAYER1,PLAYER1,PLAYER1],         # 빈칸 하나 있는 사목
-                     [PLAYER1,PLAYER1, EMPTY,PLAYER1,PLAYER1],
-                     [PLAYER1,PLAYER1,PLAYER1, EMPTY,PLAYER1],
-                     [EMPTY,PLAYER1,PLAYER1,PLAYER1, EMPTY]]            # 삼목
+# 두 번째 EMPTY에 착수하면 되는 끝내기 패턴
+AI_ENDGAME_PATTERN2 = [[EMPTY, AI, EMPTY, AI, AI, AI, EMPTY],  # 3. 빈칸 하나 있는 사목
+                       [EMPTY, AI, AI, EMPTY, AI, AI, EMPTY],
+                       [EMPTY, AI, AI, AI, EMPTY, AI, EMPTY],
+                       [EMPTY, AI, AI, AI, EMPTY, AI, PLAYER1],  # 4. 상대편 바둑돌이 막고 있고 빈칸 하나 있는 사목
+                       [EMPTY, AI, AI, EMPTY, AI, AI, PLAYER1],
+                       [EMPTY, AI, EMPTY, AI, AI, AI, PLAYER1]]
+
+# 첫 번째 EMPTY에 착수하면 되는 필수 방어 패턴
+AI_DEFENCE_PATTERN1 = [[AI, PLAYER1, EMPTY, PLAYER1, PLAYER1, PLAYER1, AI],  # 5. 양쪽에 상대편 바둑돌들이 막고있는 빈칸 하나 있는사목
+                       [AI, PLAYER1, PLAYER1, EMPTY, PLAYER1, PLAYER1, AI],
+                       [AI, PLAYER1, PLAYER1, PLAYER1, EMPTY, PLAYER1, AI],
+                       [AI, PLAYER1, PLAYER1, PLAYER1, EMPTY, PLAYER1, EMPTY],  # 4. 상대편 바둑돌이 막고 있고 빈칸 하나 있는 사목
+                       [AI, PLAYER1, PLAYER1, EMPTY, PLAYER1, PLAYER1, EMPTY],
+                       [AI, PLAYER1, EMPTY, PLAYER1, PLAYER1, PLAYER1, EMPTY],
+                       [EMPTY, PLAYER1, PLAYER1, PLAYER1, PLAYER1, AI],  # 7. 상대편 바둑돌이 막고 있는 사목
+                       [AI, PLAYER1, PLAYER1, PLAYER1, PLAYER1, EMPTY]]
+
+# 두 번째 EMPTY에 착수하면 되는 필수 방어 패턴
+AI_DEFENCE_PATTERN2 = [[EMPTY, PLAYER1, EMPTY, PLAYER1, PLAYER1, PLAYER1, EMPTY],  # 3. 빈칸 하나 있는 사목
+                       [EMPTY, PLAYER1, PLAYER1, EMPTY, PLAYER1, PLAYER1, EMPTY],
+                       [EMPTY, PLAYER1, PLAYER1, PLAYER1, EMPTY, PLAYER1, EMPTY],
+                       [EMPTY, PLAYER1, PLAYER1, PLAYER1, EMPTY, PLAYER1, AI],  # 4. 상대편 바둑돌이 막고 있고 빈칸 하나 있는 사목
+                       [EMPTY, PLAYER1, PLAYER1, EMPTY, PLAYER1, PLAYER1, AI],
+                       [EMPTY, PLAYER1, EMPTY, PLAYER1, PLAYER1, PLAYER1, AI]]
 
 
 def e_function(board):

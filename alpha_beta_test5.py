@@ -2,14 +2,17 @@
 
 from gomoku_constant import *
 from evaluate import *
+import copy
+import random
 
-
-class Ai5:
+class Ai6:
     def __init__(self, board):
         self.goBoard = board
         self.searchSpaceState, self.searchSpace = self.getInitialSearchSpace()
+        self.searchCandidate = copy.deepcopy(self.searchSpace)
         self.evaluationSpaceState, self.evaluationSpace = self.getInitialEvaluationSpace()
         self.stoneCnt = 1
+        self.searchSize = 30
         pass
 
     def getInitialSearchSpace(self):
@@ -27,11 +30,16 @@ class Ai5:
 
     def resetSearchSpace(self, x, y):
         self.searchSpaceState[x][y] = True
-        length = len(self.searchSpace)
+        length = len(self.searchCandidate)
         for i in range(length):
-            if self.searchSpace[i] == (x, y):
-                del self.searchSpace[i]
+            if self.searchCandidate[i] == (x, y):
+                del self.searchCandidate[i]
                 break
+
+        count = len(self.searchCandidate)
+        if self.searchSize <= count:
+            count = self.searchSize
+        self.searchSpace = random.sample(self.searchCandidate, count)
 
         left = x - 2 if x - 2 >= 0 else 0
         right = x + 2 if x + 2 < GO_BOARD_X_COUNT else GO_BOARD_X_COUNT
@@ -42,6 +50,7 @@ class Ai5:
                 if self.searchSpaceState[i][j]:
                     continue
                 self.searchSpaceState[i][j] = True
+                self.searchCandidate.append((i, j))
                 self.searchSpace.append((i, j))
         pass
 
@@ -120,6 +129,101 @@ class Ai5:
                 if check:
                     ret += pattern_score[z]
         return ret
+
+    def endGameCheckHorizontal(self, x, y, patternList, order):
+        for p in patternList:
+            if x < GO_BOARD_X_COUNT - len(p):
+                check = True
+                for k in range(len(p)):
+                    if self.goBoard[x + k][y] != p[k]:
+                        check = False
+                        break
+                if check:
+                    loc = p.index(EMPTY)
+                    if order == 2:
+                        loc += p[loc+1:].index(EMPTY)
+                        loc += 1
+                    return x + loc, y
+        return None, None
+
+    def endGameCheckVertical(self, x, y, patternList, order):
+        for p in patternList:
+            if y < GO_BOARD_X_COUNT - len(p):
+                check = True
+                for k in range(len(p)):
+                    if self.goBoard[x][y + k] != p[k]:
+                        check = False
+                        break
+                if check:
+                    loc = p.index(EMPTY)
+                    if order == 2:
+                        loc += p[loc+1:].index(EMPTY)
+                        loc += 1
+                    return x, y + loc
+        return None, None
+
+    def endGameCheckMainDiag(self, x, y, patternList, order):
+        for p in patternList:
+            if x < GO_BOARD_X_COUNT - len(p) and y < GO_BOARD_X_COUNT - len(p):
+                check = True
+                for k in range(len(p)):
+                    if self.goBoard[x + k][y + k] != p[k]:
+                        check = False
+                        break
+                if check:
+                    loc = p.index(EMPTY)
+                    if order == 2:
+                        loc += p[loc+1:].index(EMPTY)
+                        loc += 1
+                    return x + loc, y + loc
+        return None, None
+
+    def endGameCheckSubDiag(self, x, y, patternList, order):
+        for p in patternList:
+            if x >= len(p) and y < GO_BOARD_X_COUNT - len(p):
+                check = True
+                for k in range(len(p)):
+                    if self.goBoard[x - k][y + k] != p[k]:
+                        check = False
+                        break
+                if check:
+                    loc = p.index(EMPTY)
+                    if order == 2:
+                        loc += p[loc+1:].index(EMPTY)
+                        loc += 1
+                    return x - loc, y + loc
+        return None, None
+
+    def endGameCheck(self):
+        retx, rety = (None, None)
+
+        for t in self.evaluationSpace:
+            x, y = t
+            retx, rety = self.endGameCheckHorizontal(x, y, AI_ENDGAME_PATTERN1, 1)
+            if retx != None and rety != None:
+                break
+            retx, rety = self.endGameCheckVertical(x, y, AI_ENDGAME_PATTERN1, 1)
+            if retx != None and rety != None:
+                break
+            retx, rety = self.endGameCheckMainDiag(x, y, AI_ENDGAME_PATTERN1, 1)
+            if retx != None and rety != None:
+                break
+            retx, rety = self.endGameCheckSubDiag(x, y, AI_ENDGAME_PATTERN1, 1)
+            if retx != None and rety != None:
+                break
+            retx, rety = self.endGameCheckHorizontal(x, y, AI_ENDGAME_PATTERN2, 2)
+            if retx != None and rety != None:
+                break
+            retx, rety = self.endGameCheckVertical(x, y, AI_ENDGAME_PATTERN2, 2)
+            if retx != None and rety != None:
+                break
+            retx, rety = self.endGameCheckMainDiag(x, y, AI_ENDGAME_PATTERN2, 2)
+            if retx != None and rety != None:
+                break
+            retx, rety = self.endGameCheckSubDiag(x, y, AI_ENDGAME_PATTERN2, 2)
+            if retx != None and rety != None:
+                break
+        return retx, rety
 
     def evaluate(self):
         ai_score = 0
@@ -228,19 +332,16 @@ class Ai5:
             pass
 
     def placement(self):
-        #x, y = self.defence()
-
-        #if x is None or y is None:
-        #    place = self.minmaxWithAlphaBeta(-INF, INF, 2, AI)
-        #    x = place[1]
-        #    y = place[2]
-
         print("Search space size : \n", len(self.searchSpace))
         print("Evaluation space size : \n", len(self.evaluationSpace))
 
-        place = self.minmaxWithAlphaBeta(-INF, INF, 2, AI)
-        x = place[1]
-        y = place[2]
+        x, y = self.endGameCheck()
+        if x is None and y is None:
+            place = self.minmaxWithAlphaBeta(-INF, INF, 2, AI)
+            x = place[1]
+            y = place[2]
+
+        print("place stone at : ", x, y)
         self.goBoard[x][y] = AI
         self.stoneCnt += 1
         self.resetSearchSpace(x, y)
