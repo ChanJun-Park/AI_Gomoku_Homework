@@ -19,7 +19,7 @@ class Ai7:
         self.searchCandidate = copy.deepcopy(self.searchSpace)
         self.evaluationSpaceState, self.evaluationSpace = self.getInitialEvaluationSpace()
         self.stoneCnt = 1
-        self.searchSize = 30
+        self.searchSize = 20
         pass
 
     def getInitialSearchSpace(self):
@@ -262,8 +262,8 @@ class Ai7:
         print("place stone at : ", x, y)
         self.goBoard[x][y] = AI
         self.stoneCnt += 1
-        self.resetSearchSpace(x, y)
         self.resetEvaluationSpace(x, y)
+        self.resetSearchSpace(x, y)
         return x, y
 
     pass

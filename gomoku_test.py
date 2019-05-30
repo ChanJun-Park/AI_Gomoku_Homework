@@ -6,6 +6,7 @@ from gomoku_constant import *
 import minmax
 import alpha_beta
 import alpha_beta2
+import alpha_beta2_2
 
 def main():
     global DISPLAYSURF, BASICFONT,\
@@ -63,7 +64,8 @@ def main():
         elif level == 2:
             ai = alpha_beta.Ai7(goBoard)
         else:
-            ai = alpha_beta2.Ai8(goBoard)
+            # ai = alpha_beta2.Ai8(goBoard)
+            ai = alpha_beta2_2.Ai9(goBoard)
 
         ai.resetEvaluationSpace(lastx, lasty)
         ai.resetSearchSpace(lastx, lasty)
@@ -211,7 +213,7 @@ def finishCheck(board, cnt):
 
     # ↙ 오목 체크
     for x in range(4, GO_BOARD_X_COUNT):
-        for y in range(4, GO_BOARD_Y_COUNT):
+        for y in range(GO_BOARD_Y_COUNT - 4):
             if (board[x][y] == PLAYER1 and board[x - 1][y + 1] == PLAYER1 and board[x - 2][y + 2] == PLAYER1 \
                     and board[x - 3][y + 3] == PLAYER1 and board[x - 4][y + 4] == PLAYER1):
                 return PLAYER1
