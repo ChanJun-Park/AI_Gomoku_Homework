@@ -1,5 +1,5 @@
 # 큐를 이용해서 search space 관리
-
+# TODO 오목판 배열에서 패턴을 체크하는 중복을 제거하자
 from gomoku_constant import *
 from evaluate import *
 import copy

@@ -20,6 +20,7 @@ import alpha_beta_test2
 import alpha_beta_test3
 import alpha_beta_test4
 import alpha_beta_test5
+import alph_beta_test6
 
 def main():
     global DISPLAYSURF, BASICFONT,\
@@ -75,8 +76,8 @@ def main():
         # else:
         #     ai = alpha_beta_test2.Ai3(goBoard)
         # ai = alpha_beta_test3.Ai4(goBoard)
-        ai = alpha_beta_test5.Ai6(goBoard)
-
+        # ai = alpha_beta_test5.Ai6(goBoard)
+        ai = alph_beta_test6.Ai7(goBoard)
         # 메인 게임 루프
         while True:
             DISPLAYSURF.fill(BGCOLOR)
