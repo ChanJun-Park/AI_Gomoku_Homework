@@ -1,5 +1,3 @@
-# 큐를 이용해서 search space 관리
-# TODO 오목판 배열에서 패턴을 체크하는 중복을 제거하자
 from gomoku_constant import *
 from evaluate import *
 import copy
@@ -76,9 +74,9 @@ class Ai7:
 
     def resetEvaluationSpace(self, x, y):
         left = x - 1 if x - 1 >= 0 else 0
-        right = x + 1 if x + 1 < GO_BOARD_X_COUNT else GO_BOARD_X_COUNT
+        right = x + 2 if x + 2 < GO_BOARD_X_COUNT else GO_BOARD_X_COUNT
         top = y - 1 if y - 1 >= 0 else 0
-        bottom = y + 1 if y + 1 < GO_BOARD_Y_COUNT else GO_BOARD_Y_COUNT
+        bottom = y + 2 if y + 2 < GO_BOARD_Y_COUNT else GO_BOARD_Y_COUNT
         for i in range(left, right):
             for j in range(top, bottom):
                 if self.evaluationSpaceState[i][j]:
@@ -107,6 +105,30 @@ class Ai7:
                 check = False
                 break
         return check
+
+    def defenceCheck(self):
+        retx, rety = (None, None)
+
+        for t in self.evaluationSpace:
+            x, y = t
+            for i in range(4):  # 방향
+                for p in AI_DEFENCE_PATTERN1:
+                    if self.patternCheck(x, y, p, i):
+                        loc = p.index(EMPTY)
+                        retx = x + dx[i] * loc
+                        rety = y + dy[i] * loc
+                        return retx, rety
+
+                for p in AI_DEFENCE_PATTERN2:
+                    if self.patternCheck(x, y, p, i):
+                        loc = p.index(EMPTY)
+                        loc += p[loc + 1:].index(EMPTY)
+                        loc += 1
+                        retx = x + dx[i] * loc
+                        rety = y + dy[i] * loc
+                        return retx, rety
+
+        return retx, rety
 
     def endGameCheck(self):
         retx, rety = (None, None)
@@ -231,6 +253,8 @@ class Ai7:
 
         x, y = self.endGameCheck()
         if x is None and y is None:
+            x, y = self.defenceCheck()
+        if x is None and y is None:
             place = self.minmaxWithAlphaBeta(-INF, INF, 2, AI)
             x = place[1]
             y = place[2]
@@ -240,6 +264,6 @@ class Ai7:
         self.stoneCnt += 1
         self.resetSearchSpace(x, y)
         self.resetEvaluationSpace(x, y)
-        return True
+        return x, y
 
     pass

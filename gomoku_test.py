@@ -1,26 +1,11 @@
-'''
-2019.05.12
-기본적인 오목 UI 만들기
-0. 흑돌, 백돌 선택 버튼 (o)
-1. 게임 리셋 버튼 (o)
-2. 초급, 중급, 고급 또는 1~5단계 난이도 조절 메뉴 및 기능 구현
-    - 2가지 이상 알고리즘 구현
-    - min/max algorithm (with alpha beta prunning)
-    - 유전자 알고리즘
-    - 머신러닝
-3. 33 반칙 on/off 기능 구현
-'''
+# TODO 3 x 3 반칙 on/off 기능 구현
 
 import pygame, sys
 from pygame.locals import *
 from gomoku_constant import *
-import minmax_test
-import alpha_beta_test
-import alpha_beta_test2
-import alpha_beta_test3
-import alpha_beta_test4
-import alpha_beta_test5
-import alph_beta_test6
+import minmax
+import alpha_beta
+import alpha_beta2
 
 def main():
     global DISPLAYSURF, BASICFONT,\
@@ -64,24 +49,29 @@ def main():
         boardx = 0
         boardy = 0
 
-        drawBoard(goBoard)
+        # 마지막에 착수된 좌표
+        lastx = int(GO_BOARD_X_COUNT / 2)
+        lasty = int(GO_BOARD_Y_COUNT / 2)
+
+        drawBoard(goBoard, lastx, lasty)
 
         # AI 객체 생성 (여기서 난이도 조절?)
         ai = None
         level = selectLevel()
-        # if level == 1:
-        #     ai = minmax_test.Ai1(goBoard)
-        # elif level == 2:
-        #     ai = alpha_beta_test.Ai2(goBoard)
-        # else:
-        #     ai = alpha_beta_test2.Ai3(goBoard)
-        # ai = alpha_beta_test3.Ai4(goBoard)
-        # ai = alpha_beta_test5.Ai6(goBoard)
-        ai = alph_beta_test6.Ai7(goBoard)
+        if level == 1:
+            ai = minmax.Ai1(goBoard)
+        elif level == 2:
+            ai = alpha_beta.Ai7(goBoard)
+        else:
+            ai = alpha_beta2.Ai8(goBoard)
+
+        ai.resetEvaluationSpace(lastx, lasty)
+        ai.resetSearchSpace(lastx, lasty)
+
         # 메인 게임 루프
         while True:
             DISPLAYSURF.fill(BGCOLOR)
-            drawBoard(goBoard)
+            drawBoard(goBoard, lastx, lasty)
 
             # 게임 승패 판정
             gameState = finishCheck(goBoard, stoneCnt)
@@ -92,9 +82,7 @@ def main():
 
             #AI 차례 처리
             if turn == PLAYER2:
-                while True:
-                    if ai.placement():
-                        break
+                lastx, lasty = ai.placement()
                 stoneCnt += 1
                 turn = (PLAYER1 if turn == PLAYER2 else PLAYER2)
                 continue
@@ -114,11 +102,13 @@ def main():
                 if not goBoard[boardx][boardy]:
                     drawPseudoStone(goBoard, boardx, boardy)
                 if not goBoard[boardx][boardy] and mouseClicked:
+                    lastx = boardx
+                    lasty = boardy
                     goBoard[boardx][boardy] = turn
                     stoneCnt += 1
                     ai.stoneCnt += 1
-                    ai.resetSearchSpace(boardx, boardy)
                     ai.resetEvaluationSpace(boardx, boardy)
+                    ai.resetSearchSpace(boardx, boardy)
                     turn = (PLAYER1 if turn == PLAYER2 else PLAYER2)
                     pass
                 pass
@@ -163,7 +153,7 @@ def getBoardPosAtPixel(x, y):
         return (boardx, boardy)
     return (None, None)
 
-def drawBoard(board):
+def drawBoard(board, lastX, lastY):
     DISPLAYSURF.blit(GO_BOARD_IMG, (GO_BOARD_IMG_X, GO_BOARD_IMG_Y))
     DISPLAYSURF.blit(NEW_SURF, NEW_RECT)
     for x in range(GO_BOARD_X_COUNT):
@@ -175,6 +165,8 @@ def drawBoard(board):
             elif board[x][y] == PLAYER2:
                 pygame.draw.circle(DISPLAYSURF, P2_COLOR, (left, top), STONE_RADIUS, 0)
                 pass
+    left, top = getPixelPosOfBoard(lastX, lastY)
+    pygame.draw.circle(DISPLAYSURF, GRAY, (left, top), int(STONE_RADIUS/2), 0)
     pass
 
 def drawPseudoStone(board, x, y):
@@ -238,7 +230,7 @@ def drawFinishEvent(gameState):
     if gameState == PLAYER1:
         RESULT_SURF, RESULT_RECT = makeText('PLAYER1 WIN', BLACK, WHITE, WINDOWWIDTH - 170, 90)
     elif gameState == PLAYER2:
-        RESULT_SURF, RESULT_RECT = makeText('PLAYER2 WIN', BLACK, WHITE, WINDOWWIDTH - 170, 90)
+        RESULT_SURF, RESULT_RECT = makeText('PLAYER2(AI) WIN', BLACK, WHITE, WINDOWWIDTH - 170, 90)
     elif gameState == DRAW:
         RESULT_SURF, RESULT_RECT = makeText('DRAW', BLACK, WHITE, WINDOWWIDTH - 170, 90)
 
