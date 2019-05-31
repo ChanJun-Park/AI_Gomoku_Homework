@@ -31,12 +31,13 @@ BLACK  = (  0,   0,   0)
 GRAY   = (200, 200, 200)
 WHITE  = (255, 255, 255)
 YELLOW = (255, 211,  21)
+RED    = (255,   0,   0)
 
 BGCOLOR = WHITE
 TEXTCOLOR = BLACK
 
 # 바둑판 이미지
-GO_BOARD_IMG = pygame.image.load('go.png')
+GO_BOARD_IMG = pygame.image.load('go2.png')
 GO_BOARD_WIDTH = 580
 GO_BOARD_HEIGHT = 580
 GO_BOARD_IMG_X = int(WINDOWWIDTH / 3) - int(GO_BOARD_WIDTH / 2)
@@ -56,6 +57,7 @@ EMPTY   = 0
 PLAYER1 = 1
 PLAYER2 = 2
 AI = 2
+RED_STONE = 3
 
 # 게임 상태
 CONTINUE = 3

@@ -66,7 +66,6 @@ def main():
         else:
             # ai = alpha_beta2.Ai8(goBoard)
             ai = alpha_beta2_2.Ai9(goBoard)
-
         ai.resetEvaluationSpace(lastx, lasty)
         ai.resetSearchSpace(lastx, lasty)
 

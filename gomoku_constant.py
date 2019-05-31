@@ -36,7 +36,7 @@ BGCOLOR = WHITE
 TEXTCOLOR = BLACK
 
 # 바둑판 이미지
-GO_BOARD_IMG = pygame.image.load('go.png')
+GO_BOARD_IMG = pygame.image.load('go2.png')
 GO_BOARD_WIDTH = 580
 GO_BOARD_HEIGHT = 580
 GO_BOARD_IMG_X = int(WINDOWWIDTH / 3) - int(GO_BOARD_WIDTH / 2)

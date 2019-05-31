@@ -12,7 +12,7 @@ dx = (1, 0, 1, -1)
 dy = (0, 1, 1,  1)
 
 
-class Ai8:
+class Ai10:
     def __init__(self, board):
         self.goBoard = board
         self.compulsoryState, self.compulsorySpace = self.getInitialCompulsorySpace()
@@ -173,6 +173,8 @@ class Ai8:
         for i in range(left, right):
             for j in range(top, bottom):
                 if self.candidateState[i][j] or self.compulsoryState[i][j]:
+                    continue
+                if self.goBoard[i][j] != EMPTY:
                     continue
                 self.candidateState[i][j] = True
                 self.candidateSpace.append((i, j))

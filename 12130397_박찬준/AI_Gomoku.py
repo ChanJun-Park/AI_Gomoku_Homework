@@ -5,8 +5,7 @@ from pygame.locals import *
 from gomoku_constant import *
 import minmax
 import alpha_beta
-import alpha_beta2
-import alpha_beta2_2
+import alpha_beta3
 
 def main():
     global DISPLAYSURF, BASICFONT,\
@@ -46,10 +45,6 @@ def main():
         mousex = 0
         mousey = 0
 
-        # 바둑판 위의 좌표
-        boardx = 0
-        boardy = 0
-
         # 마지막에 착수된 좌표
         lastx = int(GO_BOARD_X_COUNT / 2)
         lasty = int(GO_BOARD_Y_COUNT / 2)
@@ -64,8 +59,7 @@ def main():
         elif level == 2:
             ai = alpha_beta.Ai7(goBoard)
         else:
-            # ai = alpha_beta2.Ai8(goBoard)
-            ai = alpha_beta2_2.Ai9(goBoard)
+            ai = alpha_beta3.Ai10(goBoard)
 
         ai.resetEvaluationSpace(lastx, lasty)
         ai.resetSearchSpace(lastx, lasty)
@@ -99,6 +93,7 @@ def main():
                     mousex, mousey = event.pos
                     mouseClicked = True
 
+            # 바둑판 위의 좌표
             boardx, boardy = getBoardPosAtPixel(mousex, mousey)
             if boardx != None and boardy != None:
                 if not goBoard[boardx][boardy]:
@@ -141,6 +136,10 @@ def getInitialBoard():
     board = []
     for i in range(GO_BOARD_X_COUNT):
         board.append([EMPTY] * GO_BOARD_Y_COUNT)
+    board[10][9] = board[2][1] = board[2][9]\
+        = board[3][15] = board[5][4] = board[11][4]\
+        = board[11][16] = board[15][2] = board[14][12]\
+        = board[17][17] = RED_STONE
     return board
 
 def getPixelPosOfBoard(boardx, boardy):
@@ -166,6 +165,9 @@ def drawBoard(board, lastX, lastY):
                 pass
             elif board[x][y] == PLAYER2:
                 pygame.draw.circle(DISPLAYSURF, P2_COLOR, (left, top), STONE_RADIUS, 0)
+                pass
+            elif board[x][y] == RED_STONE:
+                pygame.draw.circle(DISPLAYSURF, RED, (left, top), STONE_RADIUS, 0)
                 pass
     left, top = getPixelPosOfBoard(lastX, lastY)
     pygame.draw.circle(DISPLAYSURF, GRAY, (left, top), int(STONE_RADIUS/2), 0)
